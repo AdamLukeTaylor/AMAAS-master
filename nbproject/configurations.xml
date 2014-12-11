@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="f2" displayName="CartPole" projectFiles="true">
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="DWL" projectFiles="true">
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/ActionSelection.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Boltzmann.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/CollaborationProcess.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/DWLAgent.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/EGready.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/NeighbourReward.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Policy.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/QTable.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TaylorSeriesSelection.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TransferMapping.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WLearningProcess.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WTable.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="MtCar" projectFiles="true">
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.h</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.h</itemPath>
+      </logicalFolder>
+      <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="f2" displayName="CartPole" projectFiles="true">
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="DWL" projectFiles="true">
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/ActionSelection.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Boltzmann.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/CollaborationProcess.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/EGready.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/NeighbourReward.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Policy.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Reward.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TaylorSeriesSelection.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WTable.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="MtCar" projectFiles="true">
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.cpp</itemPath>
+        <itemPath>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.cpp</itemPath>
+      </logicalFolder>
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug32" type="1">
+      <toolsSet>
+        <compilerSet>Cygwin_4.x|Cygwin_4.x</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <architecture>1</architecture>
+        </cTool>
+        <ccTool>
+          <architecture>1</architecture>
+          <incDir>
+            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS/DWL/include</pElem>
+            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS/MtCar</pElem>
+            <pElem>C:/Program Files (x86)/Visual Leak Detector/src</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <architecture>1</architecture>
+        </fortranCompilerTool>
+        <asmTool>
+          <architecture>1</architecture>
+        </asmTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>C:\Program Files (x86)\Visual Leak Detector\bin\Win32</pElem>
+          </linkerAddLib>
+        </linkerTool>
+      </compileType>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/ActionSelection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Boltzmann.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/CollaborationProcess.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/DWLAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/EGready.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/NeighbourReward.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Policy.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/QTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TaylorSeriesSelection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TransferMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WLearningProcess.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/ActionSelection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Boltzmann.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/CollaborationProcess.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/EGready.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/NeighbourReward.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Policy.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Reward.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TaylorSeriesSelection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+          <incDir>
+            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS/DWL/include</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+        </asmTool>
+      </compileType>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/ActionSelection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Boltzmann.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/CollaborationProcess.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/DWLAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/EGready.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/NeighbourReward.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Policy.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/QTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TaylorSeriesSelection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TransferMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WLearningProcess.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/ActionSelection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Boltzmann.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/CollaborationProcess.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/EGready.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/NeighbourReward.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Policy.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Reward.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TaylorSeriesSelection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="debug64" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <architecture>2</architecture>
+        </cTool>
+        <ccTool>
+          <architecture>2</architecture>
+          <incDir>
+            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include</pElem>
+            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <architecture>2</architecture>
+        </fortranCompilerTool>
+        <asmTool>
+          <architecture>2</architecture>
+        </asmTool>
+      </compileType>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/ActionSelection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Boltzmann.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/CollaborationProcess.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/DWLAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/EGready.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/NeighbourReward.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Policy.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/QTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TaylorSeriesSelection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TransferMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WLearningProcess.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/WTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/ActionSelection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Boltzmann.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/CollaborationProcess.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/EGready.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/NeighbourReward.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Policy.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Reward.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TaylorSeriesSelection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="9">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

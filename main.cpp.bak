@@ -1,0 +1,610 @@
+/* 
+ * File:   main.cpp
+ * Author: Adam
+ *
+ * Created on 17 June 2014, 11:13
+ */
+
+#include <cstdlib>
+#include <errno.h>
+#include <sys/stat.h>
+#include <iostream>
+#include "CartPole.h"
+#include "DWLAgent.h"
+#include "CartPoleAgent.h"
+#include "MtCarAgent.h"
+#include <sstream>
+#include "Constants.h"
+#include "MtCar.h"
+#include "limits.h"
+#include <fstream>
+
+
+using namespace std;
+
+int exploiteCartPole();
+int poleRun();
+int exploitMtCar();
+int carRun();
+void setCarAgentForRun(double alpha, double gamma);
+void setPoleAgentForRun(double alpha, double gamma);
+void finaliseData();
+void initData();
+void writeData(std::string fileName);
+void runJava(std::string location);
+
+CartPoleAgent *poleAgent;
+CartPole *pole;
+int poleCurrentAction = 0;
+double poleAveFallTime = 0;
+int poleNumberOfFalls = 0;
+int poleLoopCounter = 0;
+int poleStepCount = 0;
+int poleCurrentMax = 0;
+
+int carLoopCounter = 0;
+MtCar* car;
+MtCarAgent* carAgent;
+int carFinishCount = 0;
+int carThisRunTime = 0;
+int carAverageTime = 0;
+int carCurrentMin = INT_MAX;
+
+double poleResults[Constants::NUMBER_OF_ALPHAS][Constants::NUMBER_OF_GAMMAS];
+double poleFalls[Constants::NUMBER_OF_ALPHAS][Constants::NUMBER_OF_GAMMAS]; //dosent really add anytghing as pole alwasys fals
+double carResults[Constants::NUMBER_OF_ALPHAS][Constants::NUMBER_OF_GAMMAS];
+double carFinishes[Constants::NUMBER_OF_ALPHAS][Constants::NUMBER_OF_GAMMAS];
+double alphas [Constants::NUMBER_OF_ALPHAS];
+double gammas [Constants::NUMBER_OF_GAMMAS];
+
+int currentRun = 0;
+int currentAlpha = 5;
+int currentGamma = 5;
+
+//these keep track of what we are doing
+std::string expName[] = {
+    "testing1"//,
+    // "testing2"
+};
+int expNumber = 0;
+
+/*
+ * 
+ */
+int main(int argc, char** argv)
+{
+    for (expNumber = 0; expNumber < (sizeof (expName) / sizeof (*expName)); expNumber++)
+    {//do the exps
+        //pole
+        initData();
+        std::string filename = "test";
+
+        //for (currentAlpha = 0; currentAlpha < Constants::NUMBER_OF_ALPHAS; currentAlpha++)
+        {
+            cout << "--------------- run " << currentAlpha << "-----------------------\n";
+            //for (currentGamma = 0; currentGamma < Constants::NUMBER_OF_GAMMAS; currentGamma++)
+            {//set results
+
+                for (currentRun = 0; currentRun < Constants::NUMBER_OF_EXPS; currentRun++)
+                {
+                    //setCarAgentForRun(alphas[currentAlpha], gammas[currentGamma]);
+                    setPoleAgentForRun(alphas[currentAlpha], gammas[currentGamma]);
+                    poleResults[currentAlpha][currentGamma] += poleRun();
+
+                }
+            }
+        }
+
+        //put out stats
+        std::stringstream ss;
+        ss << filename.c_str();
+        writeData(ss.str());
+        ss.str("");
+        ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS//results//" << "testing" << "//" << expName[expNumber];
+        runJava(ss.str());
+        //car
+        /*
+        initData();
+        std::string filename = "test";
+
+        //for (currentAlpha = 0; currentAlpha < Constants::NUMBER_OF_ALPHAS; currentAlpha++)
+        {
+            cout << "--------------- run " << currentAlpha << "-----------------------\n";
+            //for (currentGamma = 0; currentGamma < Constants::NUMBER_OF_GAMMAS; currentGamma++)
+            {//set results
+
+                for (currentRun = 0; currentRun < Constants::NUMBER_OF_EXPS; currentRun++)
+                {
+                    setCarAgentForRun(alphas[currentAlpha], gammas[currentGamma]);
+                    carResults[currentAlpha][currentGamma] += carRun();
+                }
+            }
+        }
+
+        //put out stats
+        std::stringstream ss;
+        ss << filename.c_str();
+        writeData(ss.str());
+        ss.str("");
+        ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS//results//" << "testing" << "//" << expName[expNumber];
+        runJava(ss.str());*/
+    }
+    return 0;
+}
+
+/*
+initalise the stats array*/
+void initData()
+{
+    for (int a = 0; a < Constants::NUMBER_OF_ALPHAS; a++)
+    {//set alphas
+        alphas[a] = .1 + a * .1;
+    }
+    for (int a = 0; a < Constants::NUMBER_OF_GAMMAS; a++)
+    {//set gammas
+        gammas[a] = .1 + a * .1;
+    }
+    for (int a = 0; a < Constants::NUMBER_OF_ALPHAS; a++)
+    {
+        for (int b = 0; b < Constants::NUMBER_OF_GAMMAS; b++)
+        {//set results
+
+            carResults[a][b] = 0;
+            carFinishes[a][b] = 0;
+            poleResults[a][b] = 0;
+            poleFalls[a][b] = 0;
+        }
+    }
+}
+
+/*
+average the stats*/
+void finaliseData()
+{
+    for (int a = 0; a < Constants::NUMBER_OF_ALPHAS; a++)
+    {
+        for (int b = 0; b < Constants::NUMBER_OF_GAMMAS; b++)
+        {//set results
+            //cout << "for " << alphas[a] << "," << gammas[b] << " results were " << poleResults[a][b];
+
+            carResults[a][b] = carResults[a][b] / Constants::NUMBER_OF_EXPS;
+            carFinishes[a][b] = carFinishes[a][b] / Constants::NUMBER_OF_EXPS;
+            poleResults[a][b] = poleResults[a][b] / Constants::NUMBER_OF_EXPS;
+            poleFalls[a][b] = poleFalls[a][b] / Constants::NUMBER_OF_EXPS;
+            //cout << " now " << poleResults[a][b] << "\n";
+        }
+    }
+}
+
+/*
+reset the car stats*/
+void setCarAgentForRun(double alpha, double gamma)
+{
+
+    car = new MtCar();
+    carAgent = new MtCarAgent("MtCar");
+    carAgent->changeAlphaGamma(alpha, gamma);
+    carLoopCounter = 0;
+    carFinishCount = 0;
+    carThisRunTime = 0;
+    carAverageTime = 0;
+    carCurrentMin = INT_MAX;
+}
+
+/*
+reset the car stats*/
+void setPoleAgentForRun(double alpha, double gamma)
+{
+
+    pole = new CartPole();
+    poleAgent = new CartPoleAgent("CartPole");
+    poleAgent->changeAlphaGamma(alpha, gamma);
+    poleCurrentAction = 0;
+    poleAveFallTime = 0;
+    poleNumberOfFalls = 0;
+    poleLoopCounter = 0;
+    poleStepCount = 0;
+    poleCurrentMax = 0;
+}
+
+/*
+run the car until it has finished 200 times*/
+int carRun()
+{
+
+    while (carFinishCount < Constants::CAR_TRAINING)
+    {
+        carAgent->manageLearning(true, true);
+        carAgent->changeBoltzmann(10000);
+        carAgent->chooseActionSelectionMethod(true, false);
+        for (;; carLoopCounter++)
+        {
+            carThisRunTime++;
+            int carAction = atoi(carAgent->nominate().c_str());
+            bool carActionResult = car->executeAction(carAction);
+            // cout << "action = " << carAction << " execute: " << carActionResult << "\n";
+            //car->printState();
+            carAgent->updateLocal(car->getState());
+            carAgent->finishRun();
+            if (carActionResult == true)
+            {
+                carAgent->updateLocal(car->getState());
+                //cout << "Finished it took " << carThisRunTime << " timesteps\n";
+
+                carAverageTime += carThisRunTime;
+                carThisRunTime = 0;
+                carFinishCount++;
+                //exit(0);
+                car->reset(false); //reset to not random pos
+                break;
+
+            }
+        }
+    }
+    carAverageTime = carAverageTime / carFinishCount;
+    std::cout << "MtCar Finished " << carFinishCount << " times averageing " << carAverageTime << " this was " << carLoopCounter << " steps total\n";
+    std::stringstream ss;
+    ss << "MtCar - End of explore + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
+    carAgent->writePolicies(ss.str());
+    ss.str("");
+    ss << " - a = " << currentAlpha << " g = " << currentGamma << " run = " << currentRun;
+    carAgent->printReward(ss.str());
+    //carAgent->writePolicies("End");
+
+    return exploitMtCar();
+}
+
+/*
+use what has been learned on the car
+returns what is the min seen if multiple calls*/
+int exploitMtCar()
+{
+    //set to exploit and reset the stats 
+    carAgent->changeBoltzmann(0);
+    carAgent->manageLearning(!false, !false);
+    //carAgent->chooseActionSelectionMethod(false, true);
+    carAgent->changeEGreadyE(0.0);
+    carLoopCounter = 0;
+    int stepCount = 0;
+
+    {//if not finished running
+        car->reset(false); //reset the simulator to normal
+        //carAgent->writePolicies("MtCar - start exploit");
+        for (; carLoopCounter < Constants::CAR_EXPLOITATION_TIME; carLoopCounter++)
+        {//run for a time
+
+            //choose action
+            int carAction = atoi(carAgent->nominate().c_str());
+            //cout << "Agent nominated " << carAction << "\n";
+            //car->printState();
+            //see what happened with that action
+            car->executeAction(carAction);
+            //learn from that
+            carAgent->updateLocal(car->getState());
+            if (car->getState() == "0")
+            {//see if done
+                //cout << "It took " << stepCount << " steps\n";
+                //car->printState();
+                carLoopCounter = Constants::CAR_EXPLOITATION_TIME;
+
+            }
+            else
+            {
+                //cart->printState();
+                stepCount++;
+            }
+
+        }
+        //learn once more incase it finished
+        carAgent->updateLocal(car->getState());
+    }
+    if (stepCount < carCurrentMin)
+    {
+        //carAgent->publishLocalPolicies("output");
+        carCurrentMin = stepCount;
+        cout << "Test lasted " << stepCount << " steps\n++++++++++++++++++\n";
+    }
+    if (stepCount < Constants::CAR_EXPLOITATION_TIME)
+    {//if finished in this run
+        carFinishes[currentAlpha][currentGamma]++;
+    }
+    std::stringstream ss;
+    ss << "MtCar - End of exploit + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
+    carAgent->writePolicies(ss.str());
+
+    return carCurrentMin;
+}
+
+/*
+run the cart poll until it has fallen 2000 times*/
+int poleRun()
+{
+
+    while (poleNumberOfFalls < Constants::POLL_TRAINING)
+    {//if not finished running
+        poleAgent->changeBoltzmann(10000);
+        poleAgent->manageLearning(true, true);
+        poleAgent->chooseActionSelectionMethod(true, false);
+        pole->reset();
+        poleStepCount = 0;
+        for (;; poleLoopCounter++)
+        {//run for a time
+            //choose action
+            poleCurrentAction = atoi(poleAgent->nominate().c_str());
+            //see what happened with that action
+            pole->executeAction(poleCurrentAction);
+            //learn from that
+            std::stringstream ss;
+            ss << pole->getBox();
+            poleAgent->updateLocal(pole->getCurrentState());
+            if (pole->getCurrentState() == "-1")
+            {//see if fell over
+                //cout << "Trial " << numberOfFalls << " lasted " << stepCount << " steps\n";
+                //cart->printState();
+                poleAveFallTime += poleStepCount;
+                poleNumberOfFalls++;
+                break;
+
+            }
+            else
+            {
+                //cart->printState();
+            }
+
+            poleStepCount++;
+        }
+        //learn once morein case it fell
+        std::stringstream ss;
+        ss << pole->getBox();
+        poleAgent->updateLocal(ss.str());
+    }
+    poleAveFallTime = (poleAveFallTime / poleNumberOfFalls);
+    cout << "Fell " << poleNumberOfFalls << " times averaging " << poleAveFallTime << " steps per fall\n";
+    std::stringstream ss;
+    ss << "CartPole - End of explore + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
+    poleAgent->writePolicies(ss.str());
+    ss.str("");
+    ss << " - a = " << currentAlpha << " g = " << currentGamma << " run = " << currentRun;
+    poleAgent->printReward(ss.str());
+
+    return exploiteCartPole();
+
+}
+
+/*use what has been learned on the cart poll*/
+int exploiteCartPole()
+{
+    poleAgent->changeBoltzmann(0);
+    poleAgent->manageLearning(!false, !false);
+    //poleAgent->chooseActionSelectionMethod(false, true);
+    poleAgent->changeEGreadyE(0.0);
+    //exploit
+
+    poleLoopCounter = 0;
+    int stepCount = 0;
+    {//if not finished running
+        pole->reset();
+
+        for (;; poleLoopCounter++)
+        {//run for a time
+
+            //choose action
+            poleCurrentAction = atoi(poleAgent->nominate().c_str());
+            //cout << "Agent nominated " << currentAction << "\n";
+            //cart->printState();
+            //see what happened with that action
+            pole->executeAction(poleCurrentAction);
+            //learn from that
+            poleAgent->updateLocal(pole->getCurrentState());
+            if (pole->getCurrentState() == "-1")
+            {//see if fell over
+                //cout << "It took " << stepCount << " steps\n";
+                //cart->printState();
+                break;
+
+            }
+            else
+            {
+                //cart->printState();
+            }
+            stepCount++;
+        }
+        //learn once more incase it fell
+        std::stringstream ss;
+        ss << pole->getBox();
+        poleAgent->updateLocal(ss.str());
+    }
+    if (stepCount > poleCurrentMax)
+    {
+
+        poleAgent->publishLocalPolicies("output");
+        poleCurrentMax = stepCount;
+        cout << "Pole test lasted: " << stepCount << " steps\n";
+    }
+    return stepCount;
+}
+
+/*
+ * parseValues is to write data at the beginning of file
+ */
+void writeData(std::string fileName)
+{
+
+    finaliseData();
+    std::stringstream ss;
+    ss << fileName << "+carResults.csv.stats";
+    ofstream fout(ss.str().c_str());
+    fout << "\t,";
+    for (int a = 0; a < Constants::NUMBER_OF_GAMMAS; a++)
+    {//top row
+        fout << gammas[a] << "\t";
+        if (a != (Constants::NUMBER_OF_GAMMAS - 1))
+        {
+            fout << ",";
+        }
+        else
+        {
+            fout << "\r\n";
+        }
+    }
+    for (int a = 0; a < Constants::NUMBER_OF_ALPHAS; a++)
+    {
+        fout << alphas[a] << "\t,";
+        for (int b = 0; b < Constants::NUMBER_OF_GAMMAS; b++)
+        {//set results
+            fout << carResults[a][b] << "\t";
+            if (b != (Constants::NUMBER_OF_GAMMAS - 1))
+            {
+                fout << ",";
+            }
+            else
+            {
+                fout << "\r\n";
+            }
+        }
+    }
+    fout.close();
+    fout.clear();
+
+    //print finshes
+    ss.str("");
+    ss << fileName << "+carFinishes.csv.stats";
+    ofstream fout0(ss.str().c_str());
+    fout0 << "\t,";
+    for (int a = 0; a < Constants::NUMBER_OF_GAMMAS; a++)
+    {//top row
+        fout0 << gammas[a] << "\t";
+        if (a != (Constants::NUMBER_OF_GAMMAS - 1))
+        {
+            fout0 << ",";
+        }
+        else
+        {
+            fout0 << "\r\n";
+        }
+    }
+    for (int a = 0; a < Constants::NUMBER_OF_ALPHAS; a++)
+    {
+        fout0 << alphas[a] << "\t,";
+        for (int b = 0; b < Constants::NUMBER_OF_GAMMAS; b++)
+        {//set results
+            fout0 << carFinishes[a][b] << "\t";
+            if (b != (Constants::NUMBER_OF_GAMMAS - 1))
+            {
+                fout0 << ",";
+            }
+            else
+            {
+
+                fout0 << "\r\n";
+            }
+        }
+    }
+    fout0.close();
+
+    ss.str("");
+    ss << fileName << "+poleResults.csv.stats";
+    ofstream fout1(ss.str().c_str());
+    fout1 << "\t,";
+    for (int a = 0; a < Constants::NUMBER_OF_GAMMAS; a++)
+    {//top row
+        fout1 << gammas[a] << "\t";
+        if (a != (Constants::NUMBER_OF_GAMMAS - 1))
+        {
+            fout1 << ",";
+        }
+        else
+        {
+            fout1 << "\r\n";
+        }
+    }
+    for (int a = 0; a < Constants::NUMBER_OF_ALPHAS; a++)
+    {
+        fout1 << alphas[a] << "\t,";
+        for (int b = 0; b < Constants::NUMBER_OF_GAMMAS; b++)
+        {//set results
+            fout1 << poleResults[a][b] << "\t";
+            if (b != (Constants::NUMBER_OF_GAMMAS - 1))
+            {
+                fout1 << ",";
+            }
+            else
+            {
+                fout1 << "\r\n";
+            }
+        }
+    }
+    fout1.close();
+    fout1.clear();
+
+    //print finshes
+    ss.str("");
+    ss << fileName << "+poleFalls.csv.stats";
+    ofstream fout2(ss.str().c_str());
+    fout2 << "\t,";
+    for (int a = 0; a < Constants::NUMBER_OF_GAMMAS; a++)
+    {//top row
+        fout2 << gammas[a] << "\t";
+        if (a != (Constants::NUMBER_OF_GAMMAS - 1))
+        {
+            fout2 << ",";
+        }
+        else
+        {
+            fout2 << "\r\n";
+        }
+    }
+    for (int a = 0; a < Constants::NUMBER_OF_ALPHAS; a++)
+    {
+        fout2 << alphas[a] << "\t,";
+        for (int b = 0; b < Constants::NUMBER_OF_GAMMAS; b++)
+        {//set results
+            fout2 << poleFalls[a][b] << "\t";
+            if (b != (Constants::NUMBER_OF_GAMMAS - 1))
+            {
+                fout2 << ",";
+            }
+            else
+            {
+
+                fout2 << "\r\n";
+            }
+        }
+    }
+    fout2.close();
+}
+
+/**
+ * run a java prog to clean up
+ */
+void runJava(std::string location)
+{
+    cout << "~~before java" << endl;
+    /* FILE *fpipe;
+     char *command = (char *) "java.bat";
+     char line[256];
+
+     if (!(fpipe = (FILE*) system(command)))
+     { // If fpipe is NULL
+         perror("Problems with pipe");
+         exit(1);
+     }
+
+     while (fgets(line, sizeof line, fpipe))
+     {
+         printf("%s", line);
+     }
+     pclose(fpipe);
+
+     */
+    std::stringstream ss;
+    ss << "java -jar C://Users//Adam//Documents//NetBeansProjects//AMAAS//AAMASClean.jar ";
+    ss << location;
+    system(ss.str().c_str());
+
+    cout << "~~done java" << endl;
+
+
+
+
+}
