@@ -43,7 +43,7 @@ std::string Boltzmann::calculateNextAction(std::vector<std::pair<std::string, do
             std::cout << "error 1 in action selsction\n";
             exit(674);
         }
-        if (isinf((*actionIterator).second))
+       // if (isinf((*actionIterator).second))
         {//if is infinity
             std::cout << "error 2 in action selsction\n";
             exit(674);

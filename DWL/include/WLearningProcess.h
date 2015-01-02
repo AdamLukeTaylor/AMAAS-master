@@ -82,9 +82,9 @@ public:
     int getVisitCount(std::string stateName, std::string actionName);
     std::vector<std::pair<std::string, bool> >getTransferFeedback();
     void provideTransferFeedback(std::string stateName, bool feedback);
-
+void clearTLFeadback();
 private:
-    void clearTLFeadback();
+    
     bool useBoltzmann;
     bool useEGready;
     bool useTaylor;

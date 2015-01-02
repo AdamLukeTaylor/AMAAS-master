@@ -18,7 +18,7 @@ CartPoleAgent::CartPoleAgent(std::string name) : DWLAgent(name)
     std::cerr << "Creating Agent " << this->getName() << std::endl;
 
     // instantiate the specific Reward for the policy which you have already defined
-    RewardCartPole* rewardCartPole = new RewardCartPole();
+    rewardCartPole = new RewardCartPole();
 
     // add the local policy to the agent and return a handle to it for creating the state space 
     std::string policyName = std::string(this->getName() + "+CartPole");

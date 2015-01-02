@@ -5,6 +5,7 @@
  * Created on 17 June 2014, 14:17
  */
 #include <string>
+#include "RewardCartPole.h"
 #include "DWL/include/DWLAgent.h"
 
 #ifndef CARTPOLEAGENT_H
@@ -15,7 +16,7 @@ public:
     CartPoleAgent(std::string name);
     virtual ~CartPoleAgent();
 private:
-
+RewardCartPole* rewardCartPole;
 };
 
 #endif	/* CARTPOLEAGENT_H */

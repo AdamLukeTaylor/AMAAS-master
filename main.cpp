@@ -20,7 +20,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <vld.h>
+#include <vld.h>
 
 using namespace std;
 
@@ -70,7 +70,7 @@ int currentGamma = 0;
 //thes3 keep track of what we are doing
 std::string expName[] = {
     "eval",
-    "f9"//f 10, .001
+    "n0"//f 10, .001
 }; //e =reward 1 fg2= reward 2 g= 1 tst not 3
 int expNumber = 1;
 
@@ -183,8 +183,8 @@ int main(int argc, char** argv)
         //for (currentGamma = 0; currentGamma < Constants::NUMBER_OF_GAMMAS; currentGamma++)
         //currentGamma = 8;
         {//set results
-            int numberOfTimes = 90; //currentRun < Constants::NUMBER_OF_EXPS * numberOfTimes
-            for (currentRun = 0; currentRun < 2; currentRun++)
+            int numberOfTimes = 100; //Constants::NUMBER_OF_EXPS * numberOfTimes
+            for (currentRun = 0; currentRun < Constants::NUMBER_OF_EXPS * numberOfTimes; currentRun++)
             {
                 setCarAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
                 setPoleAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
@@ -194,7 +194,9 @@ int main(int argc, char** argv)
                     std::stringstream ss;
                     ss << "before";
                     carAgent->printMappings(ss.str(), 1, expName[expNumber]);
-                    carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", "C:\\Users\\Adam\\Documents\\NetBeansProjects\\AMAAS-master\\MtCar+MtCar to CartPole+CartPole reuse-mapping.txt.f9.stats");
+                    ss.str("");
+                    ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//MtCar+MtCar to CartPole+CartPole reuse-mapping.txt." << expName[expNumber] << ".stats";
+                    carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", ss.str());
                 }
                 int toRun = (currentRun / numberOfTimes) + 1;
                 std::cout << toRun << "=torun\n";
@@ -235,7 +237,7 @@ int main(int argc, char** argv)
     writeData(ss.str(), true, expName[expNumber]); //flush all stats
     std::stringstream ss1;
     ss1 << "C://Users//Adam//Documents//NetBeansProjects//aamasResults//" << expName[expNumber] << "//overall";
-    runJava(ss1.str(), expName[expNumber]);
+    //runJava(ss1.str(), expName[expNumber]);
     return 0;
 }
 //1 is inital test 2 is retest 3 is plus main swap vector//55 19 53
@@ -391,8 +393,8 @@ void duelRun(int number)
     {
         breakRun = number;
     }
-    bool useTL = !false;
-    bool poleLearn = !false;
+    bool useTL = false;
+    bool poleLearn = false;
     bool interTest = !true;
     bool limitTraining = true;
     poleAgent->setUsingTransferLearning(true);
@@ -581,7 +583,8 @@ double exploiteMtCar()
         //set to exploit and reset the stats 
         carAgent->changeActionSelectionTemperature(0);
         carAgent->manageLearning(!false, !false);
-        //carAgent->chooseActionSelectionMethod(false, true);
+		carAgent->setUsingTransferLearning(false);
+        carAgent->chooseActionSelectionMethod(false,false, true);
         carAgent->changeEGreadyE(0.0);
         carLoopCounter = 0;
         int stepCount = 0;
@@ -636,7 +639,7 @@ double exploiteMtCar()
     ss << "MtCar - End of exploit + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
     //carAgent->writePolicies(ss.str(), expName[expNumber]);
     totalExpolit = totalExpolit / Constants::NUMBER_OF_MT_CAR_EXPOLITE_RUNS;
-
+carAgent->finishRun();
     return totalExpolit;
 }
 
@@ -715,6 +718,7 @@ double exploiteCartPole()
         {
             std::cout << "new exploit run" << std::endl;
             poleAgent->changeActionSelectionTemperature(1);
+			poleAgent->setUsingTransferLearning(false);
             poleAgent->manageLearning(!true, !true);
             poleAgent->chooseActionSelectionMethod(false, false, !false);
             //exploit
@@ -800,6 +804,7 @@ double exploiteCartPole()
         exit(54234563);
         /// totalStepCount = exploiteCartPole();
     }
+	poleAgent->finishRun(); 
     return totalStepCount;
 }
 

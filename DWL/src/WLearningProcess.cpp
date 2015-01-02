@@ -624,6 +624,6 @@ std::vector<std::pair<std::string, bool> > WLearningProcess::getTransferFeedback
     std::vector < std::pair < std::string, bool> >temp = transferFeedback;
     //std::cout << transferFeedback.size() << "= feed back size in wLP\n";
     //std::cout << temp.size() << " " << this->getPolicyName() << "= feed back size temp in wLP\n";
-    transferFeedback.clear(); //we're done with it
+    this->clearTLFeadback();
     return temp;
 }

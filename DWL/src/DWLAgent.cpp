@@ -733,15 +733,21 @@ void DWLAgent::updateLocal(std::string stateName)
                     //std::cout << "about to make feedback\n";
                     if (test->getMostRecentReward() > 0)
                     {//if good reward feedback good
-                        std::stringstream ss;
+                        if (usingTransferLearning)
+                        {std::stringstream ss;
                         ss << test->getPreviousState() << ":" << test->getCurrentAction();
-                        test->provideTransferFeedback(ss.str(), true);
+                        
+                            test->provideTransferFeedback(ss.str(), true);
+                        }
                     }
                     else
                     {//bad feeback
-                        std::stringstream ss;
+                        if (usingTransferLearning)
+                        {std::stringstream ss;
                         ss << test->getPreviousState() << ":" << test->getCurrentAction();
-                        test->provideTransferFeedback(ss.str(), false);
+                        
+                            test->provideTransferFeedback(ss.str(), false);
+                        }
                     }
                 }
             }
@@ -946,14 +952,30 @@ void DWLAgent::finishRun()
     {//put locals into sugestion vector and see best
         Policy* test = *localIterator;
         //std::cout<<((WLearningProcess*) (test))->getPolicyName()<<"  finish run\n";
+		if(usingTransferLearning)
+	{//no extra cleaning needed
+	}
+	else
+	{
+		((WLearningProcess*)test)->clearTLFeadback();
+	}
         localIterator++;
     }
     std::vector<Policy*>::iterator remoteIterator = remotePolicies.begin();
     while (remoteIterator != remotePolicies.end())
     {
         Policy* test = *remoteIterator;
+		if(usingTransferLearning)
+	{//no extra cleaning needed
+	}
+	else
+	{
+		((WLearningProcess*)test)->clearTLFeadback();
+	}
+
         remoteIterator++;
     }
+	
 }
 
 /**

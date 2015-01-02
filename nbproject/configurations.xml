@@ -92,9 +92,10 @@
         <ccTool>
           <architecture>1</architecture>
           <incDir>
-            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS/DWL/include</pElem>
-            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS/MtCar</pElem>
+            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include</pElem>
+            <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar</pElem>
             <pElem>C:/Program Files (x86)/Visual Leak Detector/src</pElem>
+            <pElem>C:/Program Files (x86)/Visual Leak Detector/include</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>

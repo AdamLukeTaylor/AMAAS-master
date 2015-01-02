@@ -151,6 +151,8 @@ void TransferMapping::loadMapping(std::string filename)
                         votes.insert(toAddVotes);
                         //add to allocated pool
                         sourceAllocatedPool.push_back(source);
+                        std::vector<std::string> emptyVectorS;
+                        splitV.swap(emptyVectorS);
                     }
                 }
                 getline(myfile, line);
