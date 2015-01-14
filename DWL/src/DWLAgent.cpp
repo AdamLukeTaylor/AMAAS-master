@@ -733,21 +733,24 @@ void DWLAgent::updateLocal(std::string stateName)
                     //std::cout << "about to make feedback\n";
                     if (test->getMostRecentReward() > 0)
                     {//if good reward feedback good
-                        if (usingTransferLearning)
-                        {std::stringstream ss;
-                        ss << test->getPreviousState() << ":" << test->getCurrentAction();
-                        
+                        /*
+                         //old update for if pos reward good was nieve if (usingTransferLearning)
+                        {
+                            std::stringstream ss;
+                            ss << test->getPreviousState() << ":" << test->getCurrentAction();
+
                             test->provideTransferFeedback(ss.str(), true);
-                        }
+                        }*/
                     }
                     else
                     {//bad feeback
-                        if (usingTransferLearning)
-                        {std::stringstream ss;
-                        ss << test->getPreviousState() << ":" << test->getCurrentAction();
-                        
+                        /*if (usingTransferLearning)
+                        {
+                            std::stringstream ss;
+                            ss << test->getPreviousState() << ":" << test->getCurrentAction();
+
                             test->provideTransferFeedback(ss.str(), false);
-                        }
+                        }*/
                     }
                 }
             }
@@ -952,30 +955,30 @@ void DWLAgent::finishRun()
     {//put locals into sugestion vector and see best
         Policy* test = *localIterator;
         //std::cout<<((WLearningProcess*) (test))->getPolicyName()<<"  finish run\n";
-		if(usingTransferLearning)
-	{//no extra cleaning needed
-	}
-	else
-	{
-		((WLearningProcess*)test)->clearTLFeadback();
-	}
+        if (usingTransferLearning)
+        {//no extra cleaning needed
+        }
+        else
+        {
+            ((WLearningProcess*) test)->clearTLFeadback();
+        }
         localIterator++;
     }
     std::vector<Policy*>::iterator remoteIterator = remotePolicies.begin();
     while (remoteIterator != remotePolicies.end())
     {
         Policy* test = *remoteIterator;
-		if(usingTransferLearning)
-	{//no extra cleaning needed
-	}
-	else
-	{
-		((WLearningProcess*)test)->clearTLFeadback();
-	}
+        if (usingTransferLearning)
+        {//no extra cleaning needed
+        }
+        else
+        {
+            ((WLearningProcess*) test)->clearTLFeadback();
+        }
 
         remoteIterator++;
     }
-	
+
 }
 
 /**
@@ -1311,7 +1314,7 @@ void DWLAgent::findAllInterestingPairs(std::vector < std::pair<std::string, std:
                     std::pair<std::string, std::pair<std::string, double> > toAdd;
                     toAdd.first = test->getTargetName();
                     std::vector<std::pair<std::string, double> > vect;
-                    if (!false || ((WLearningProcess*) (*localIterator))->getBoltzmannTemperature() <= 10)
+                    if (false || ((WLearningProcess*) (*localIterator))->getBoltzmannTemperature() <= 10)
                     {//if small botz be gready
                         vect = test->choosePairsBasedOnVotes(2, 1, ((WLearningProcess*) ((*localIterator)))->getQTable()); //TransferMapping::makePairForMapper(test->mapFromStateToTarget(TransferMapping::makePairForMapper(this->findInterestingPair(policyName)))); //set the pair to pass translated to the neighbours space
                     }
@@ -1699,10 +1702,12 @@ void DWLAgent::readTransferedInfoIn(std::vector<std::pair<std::string, std::pair
                     outputValue = oldValue + ((newValue - oldValue) / 2);
                     }*/
                     //over 5
-                    /*if(((WLearningProcess*) local)->getVisitCount(state, action)>10)
-                    {
-                    outputValue=newValue;
-                    }*/
+                    if (((WLearningProcess*) local)->getVisitCount(state, action) < 10)
+                    {//if only seldom visited take what is offered if not redo the mapping (basicall assum ours better and ask for data elswhere))
+                        outputValue = newValue;
+                        goodTransfer = true;
+                    }
+
                     /*if(((WLearningProcess*) local)->getVisitCount(state, action)<5)
                     {
                     outputValue=newValue;
@@ -1729,10 +1734,10 @@ void DWLAgent::readTransferedInfoIn(std::vector<std::pair<std::string, std::pair
                     ((WLearningProcess*) local)->setQValue(state, action, outputValue);
                     //std::cout << "merging " << state << " " << action << " to " << outputValue << std::endl;
                     //now set feedback for the mapping
-                    //std::stringstream ss;
-                    //ss << state << ":" << action;
-                    //don't feedback here((WLearningProcess*) local)->provideTransferFeedback(ss.str(), goodTransfer);
-                    //localIterator = localPolicies.end(); //end loop
+                    std::stringstream ss;
+                    ss << state << ":" << action;
+                    ((WLearningProcess*) local)->provideTransferFeedback(ss.str(), goodTransfer);
+                    localIterator = localPolicies.end(); //end loop
                     break;
                 }
                 else
@@ -1986,7 +1991,7 @@ std::vector<QTable*> DWLAgent::getLocalQTables()
  */
 void DWLAgent::printReward(std::string input, std::string tag)
 {
-    std::cout << "start print mappings" << std::endl;
+    //std::cout << "start print mappings" << std::endl;
     std::string filename = this->getName() + input + "-reward.txt." + tag + ".stats";
     //std::cerr << "writing " << filename << "\n";
     std::ofstream outputfile(filename.c_str());
@@ -2007,7 +2012,7 @@ void DWLAgent::printReward(std::string input, std::string tag)
         std::cerr << "\nQtable->writeStateActionToFile Unable to open file\n";
         exit(89);
     }
-    std::cout << "Print reward done!\n";
+    //std::cout << "Print reward done!\n";
 }
 
 /**
@@ -2029,7 +2034,7 @@ void DWLAgent::printMappings(std::string filename, int mode, std::string tag)
         }
         mappingIterator++;
     }
-    std::cout << "end print mappings\n";
+    // std::cout << "end print mappings\n";
 }
 
 /**

@@ -1,16 +1,17 @@
 %consts
-numberOfExps=10;
+numberOfExps=100;
+name='e0long';
 carMax=100000;
 poleMin=500;
 %read pole data
-filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\f3\\overall\\final+poleSteps.csv')
+filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\%s\\overall\\final+poleSteps.csv',name)
 poleData=csvread(filename);%get data
 poleData = poleData(1:(length(poleData)-1));%drop last ellement 0
 poleAve=mean(poleData)
 
 
 %read car data
-filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\f3\\overall\\final+carSteps.csv')
+filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\%s\\overall\\final+carSteps.csv',name)
 carData=csvread(filename);%get data
 carData = carData(1:(length(carData)-1));%drop last ellement 0
 carAve=mean(carData)
@@ -74,7 +75,7 @@ box on
 %set(gca,'XLim',[0 100000*10]);%exps for range test
 %set(gca,'XTick',[0:1000:10000*1000])
 %set(gca,'XTickLabel',axisLabelPrint)
-title(filename)%'3 tl Cart Pole Vs Mt Car','FontWeight','bold')
+title(name)%'3 tl Cart Pole Vs Mt Car','FontWeight','bold')
 xlabel('Runs')
 ylabel('Performance')
 %legend('Probabilistic','DWL','DWL+PTL(Q+W)', 'Base Load','Location','northwest')
@@ -83,7 +84,7 @@ ylabel('Performance')
 outname=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\AMAAS\\matlab\\output\\MtVsCar.png')
 %scatter(locations,data)%,'Color',[1,0,0],'LineStyle','-','Marker','.')
 
-%plot(outCarData,'Color',[1,0,0],'LineStyle','-','Marker','.')
+plot(outCarData,'Color',[1,0,0],'LineStyle','-','Marker','.')
 plot(outPoleData,'Color',[0,1,0],'LineStyle','-','Marker','.')
 legend('Mt Car Steps','Cart Pole Steps','DWL+PTL(Q+W)', 'Base Load','Location','northwest')
 %print(fig1,'-dpng','-r1000',outname)

@@ -1,17 +1,17 @@
 %consts
-numberOfExps=10
-0;
+numberOfExps=100;
+name='a3b';
 carMax=100000;
 poleMin=500;
 %read pole data
-filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\f1\\overall\\final+poleSteps.csv')
+filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\%s\\overall\\final+poleSteps.csv',name)
 poleData=csvread(filename);%get data
 poleData = poleData(1:(length(poleData)-1));%drop last ellement 0
 poleAve=mean(poleData)
 
 
 %read car data
-filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\f1\\overall\\final+carSteps.csv')
+filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\%s\\overall\\final+carSteps.csv',name)
 carData=csvread(filename);%get data
 carData = carData(1:(length(carData)-1));%drop last ellement 0
 carAve=mean(carData)
@@ -75,7 +75,7 @@ box on
 %set(gca,'XLim',[0 100000*10]);%exps for range test
 %set(gca,'XTick',[0:1000:10000*1000])
 %set(gca,'XTickLabel',axisLabelPrint)
-title(filename)%'3 tl Cart Pole Vs Mt Car','FontWeight','bold')
+title(name)%'3 tl Cart Pole Vs Mt Car','FontWeight','bold')
 xlabel('Runs')
 ylabel('Performance')
 %legend('Probabilistic','DWL','DWL+PTL(Q+W)', 'Base Load','Location','northwest')
