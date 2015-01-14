@@ -1316,11 +1316,11 @@ void DWLAgent::findAllInterestingPairs(std::vector < std::pair<std::string, std:
                     std::vector<std::pair<std::string, double> > vect;
                     if (false || ((WLearningProcess*) (*localIterator))->getBoltzmannTemperature() <= 10)
                     {//if small botz be gready
-                        vect = test->choosePairsBasedOnVotes(2, 1, ((WLearningProcess*) ((*localIterator)))->getQTable()); //TransferMapping::makePairForMapper(test->mapFromStateToTarget(TransferMapping::makePairForMapper(this->findInterestingPair(policyName)))); //set the pair to pass translated to the neighbours space
+                        vect = test->choosePairsBasedOnVotes(20, 1, ((WLearningProcess*) ((*localIterator)))->getQTable()); //TransferMapping::makePairForMapper(test->mapFromStateToTarget(TransferMapping::makePairForMapper(this->findInterestingPair(policyName)))); //set the pair to pass translated to the neighbours space
                     }
                     else
                     {//if big botz dont be gready
-                        vect = test->choosePairsBasedOnVotes(2, 0, ((WLearningProcess*) ((*localIterator)))->getQTable()); //TransferMapping::makePairForMapper(test->mapFromStateToTarget(TransferMapping::makePairForMapper(this->findInterestingPair(policyName)))); //set the pair to pass translated to the neighbours space
+                        vect = test->choosePairsBasedOnVotes(20, 0, ((WLearningProcess*) ((*localIterator)))->getQTable()); //TransferMapping::makePairForMapper(test->mapFromStateToTarget(TransferMapping::makePairForMapper(this->findInterestingPair(policyName)))); //set the pair to pass translated to the neighbours space
                     }
                     std::vector<std::pair<std::string, double> >::iterator vectIterator = vect.begin();
                     //std::cerr << "findAllInterestingPairs -policy name= " << policyName << "\n";
@@ -1702,7 +1702,7 @@ void DWLAgent::readTransferedInfoIn(std::vector<std::pair<std::string, std::pair
                     outputValue = oldValue + ((newValue - oldValue) / 2);
                     }*/
                     //over 5
-                    if (((WLearningProcess*) local)->getVisitCount(state, action) < 10)
+                    //if (((WLearningProcess*) local)->getVisitCount(state, action) < 10)
                     {//if only seldom visited take what is offered if not redo the mapping (basicall assum ours better and ask for data elswhere))
                         outputValue = newValue;
                         goodTransfer = true;

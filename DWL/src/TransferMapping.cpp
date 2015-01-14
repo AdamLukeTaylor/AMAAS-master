@@ -187,7 +187,7 @@ std::vector<std::pair<std::string, double> > TransferMapping::choosePairsBasedOn
     std::map<std::pair<std::string, std::string>, int>::iterator votesIterator = votes.begin();
     if ((double) rand() / RAND_MAX > greadiness)
     {//if should be not gready
-        //std::cout << "not gready" << std::endl;
+        // std::cout << "not gready" << std::endl;
         int loopCount = 0;
         while (output.size() < numberOfPairs)
         {//until we have all
@@ -257,48 +257,62 @@ std::vector<std::pair<std::string, double> > TransferMapping::choosePairsBasedOn
         {//for all votes
             if ((*votesIterator).second > winningVotes[numberOfPairs - 1])
             {//if bigger than last one see where it should go
-                bool foundPlace = false;
-                std::string overflowName = "";
-                double overflowQ = 0;
-                int overflowVotes = INT_MIN;
-                for (int a = 0; a < numberOfPairs; a++)
-                {//start at biggest
-                    //std::cout << " 1" << std::endl;
-                    if (foundPlace)
-                    {//we've already found it put in the overflow from previous and save this ones
-                        std::string x = overflowName;
-                        int y = overflowVotes;
-                        double z = overflowQ;
-                        //std::cout << " 2" << std::endl;
-                        overflowName = winningNames[a];
-                        overflowVotes = winningVotes[a];
-                        overflowQ = winningQs[a];
+                //put it in store
+                std::string toAddName = (*votesIterator).first.second; //target's state
+                int toAddVotes = (*votesIterator).second; //votes
+                std::string sourceStateAction = (*votesIterator).first.first;
+                std::string sourceState = sourceStateAction.substr(0, sourceStateAction.find(":"));
+                std::string sourceAction = sourceStateAction.substr(sourceStateAction.find(":") + 1);
+                //find in table
+                double toAddQ = qIn->getQValue(sourceState, sourceAction);
 
-                        winningNames[a] = x;
-                        winningVotes[a] = y;
-                        winningQs[a] = z;
+                for (int a = 0; a < numberOfPairs; a++)
+                {//go through all in arrays and add
+                    //std::cout << a << " comparing " << winningNames[a] << " with " << winningVotes[a] << " votes and " << toAddName << " with " << toAddVotes << std::endl;
+                    if (toAddVotes > winningVotes[a])
+                    {//if should be here
+                        //std::cout << "added one" << std::endl;
+                        //save old ones
+                        std::string tempName = winningNames[a];
+                        double tempQ = winningQs[a];
+                        int tempVotes = winningVotes[a];
+                        //add to be added (either new one or displaced old one)
+                        winningNames[a] = toAddName;
+                        winningQs[a] = toAddQ;
+                        winningVotes[a] = toAddVotes;
+                        //now put displaced one into to add space
+                        toAddVotes = tempVotes;
+                        toAddQ = tempQ;
+                        toAddName = tempName;
                     }
-                    if (foundPlace == false && overflowVotes < (*votesIterator).second)
-                    {//is bigger and not found yet save old and put in this one
-                        //std::cout << " 3" << std::endl;
-                        overflowName = winningNames[a];
-                        overflowVotes = winningVotes[a];
-                        overflowQ = winningQs[a];
-                        winningNames[a] = (*votesIterator).first.second;
-                        winningVotes[a] = (*votesIterator).second;
-                        std::string sourceStateAction = (*votesIterator).first.first;
-                        std::string sourceState = sourceStateAction.substr(0, sourceStateAction.find(":"));
-                        std::string sourceAction = sourceStateAction.substr(sourceStateAction.find(":") + 1);
-                        //find in table
-                        winningQs[a] = qIn->getQValue(sourceState, sourceAction);
-                        foundPlace = true;
+                    else if ((toAddVotes == winningVotes[a])&&(rand() % 10 == 0))
+                    {//if might be here
+                        //std::cout << "added one =" << std::endl;
+                        //save old ones
+                        std::string tempName = winningNames[a];
+                        double tempQ = winningQs[a];
+                        int tempVotes = winningVotes[a];
+                        //add to be added (either new one or displaced old one)
+                        winningNames[a] = toAddName;
+                        winningQs[a] = toAddQ;
+                        winningVotes[a] = toAddVotes;
+                        //now put displaced one into to add space
+                        toAddVotes = tempVotes;
+                        toAddQ = tempQ;
+                        toAddName = tempName;
+                    }
+                    else
+                    {
+                        //std::cout << "the other thing" << std::endl;
                     }
 
                 }
+
             }
 
             votesIterator++;
         }
+        //std::cout << "end lop" << std::endl;
         for (int a = 0; a < numberOfPairs; a++)
         {//add the winners
             std::pair < std::string, double > toAdd;
@@ -306,17 +320,19 @@ std::vector<std::pair<std::string, double> > TransferMapping::choosePairsBasedOn
             toAdd.second = winningQs[a];
             output.push_back(toAdd);
         }
-        delete winningNames;
-        delete winningVotes;
-        delete winningQs;
+        //std::cout << "after print" << std::endl;
+        delete[] winningNames;
+        delete[] winningVotes;
+        delete[] winningQs;
+        //std::cout << "deleted" << std::endl;
     }
     //std::cout << "output:\n";
     std::vector<std::pair<std::string, double> >::iterator outputIterator = output.begin();
-    while (outputIterator != output.end())
+    /*while (outputIterator != output.end())
     {
-        // std::cout << (*outputIterator).first << "\n";
+        std::cout << (*outputIterator).first << "\n";
         outputIterator++;
-    }
+    }*/
     //std::cout << "end choose by votes" << std::endl;
     return output;
 }

@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 
-RewardCartPole::RewardCartPole()
+RewardCartPole::RewardCartPole() : Reward()
 {
 }
 

@@ -15,7 +15,7 @@ CartPoleAgent::CartPoleAgent(std::string name) : DWLAgent(name)
 {
     this->setUsingTransferLearning(true);
 
-    std::cerr << "Creating Agent " << this->getName() << std::endl;
+    //std::cerr << "Creating Agent " << this->getName() << std::endl;
 
     // instantiate the specific Reward for the policy which you have already defined
     rewardCartPole = new RewardCartPole();
@@ -23,7 +23,6 @@ CartPoleAgent::CartPoleAgent(std::string name) : DWLAgent(name)
     // add the local policy to the agent and return a handle to it for creating the state space 
     std::string policyName = std::string(this->getName() + "+CartPole");
     Policy* cartPolePolicy = this->addLocalPolicy(policyName, rewardCartPole);
-
 
 
 

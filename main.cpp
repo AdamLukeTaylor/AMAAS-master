@@ -70,7 +70,7 @@ int currentGamma = 0;
 //thes3 keep track of what we are doing
 std::string expName[] = {
     "eval",
-    "a3d"//f 10, .001
+    "b1c"//f 10, .001
 }; //e =reabward 1 fg2= reward 2 g= 1 tst not 3
 int expNumber = 1;
 
@@ -201,8 +201,9 @@ int main(int argc, char** argv)
                 }
                 //int toRun = (currentRun / numberOfTimes) + 1;
                 //std::cout << toRun << "=torun\n";
+                //std::cout << "1" << std::endl;
                 duelRun(Constants::CAR_TRAINING_STEPS); //(currentRun + 3) / 3);                
-
+                //std::cout << "2" << std::endl;
                 //carSteps.push_back(carRun(toRun));
                 //poleSteps.push_back(poleRun(toRun));
                 std::stringstream ss;
@@ -331,6 +332,7 @@ void setPoleAgentForRun(double alpha, double gamma)
     poleLoopCounter = 0;
     poleStepCount = 0;
     poleCurrentMax = 0;
+
 }
 
 /*
@@ -543,7 +545,7 @@ void duelRun(int number)
     ss1 << " - a = " << currentAlpha << " g = " << currentGamma << " run = " << currentRun;
     carAgent->printReward(ss1.str(), expName[expNumber]);
     //carAgent->writePolicies("End");
-    cout << "2Finished\n";
+    //cout << "2Finished\n";
 
     poleAveFallTime = (poleAveFallTime / poleNumberOfFalls);
     cout << "Fell " << poleNumberOfFalls << " times averaging " << poleAveFallTime << " steps per fall\n";
@@ -558,9 +560,9 @@ void duelRun(int number)
     if (false == interTest)
     {
         int exploitePole = exploiteCartPole();
-        std::cout << "end cartpole explot\n";
+        //std::cout << "end cartpole explot\n";
         int exploiteCar = exploiteMtCar();
-        std::cout << "end mt car explot\n";
+        //std::cout << "end mt car explot\n";
         poleResults[currentAlpha][currentGamma] += exploitePole;
         poleSteps.push_back(exploitePole); //save the record
         carSteps.push_back(exploiteCar);
@@ -789,7 +791,7 @@ double exploiteCartPole()
             }
             totalStepCount += stepCount;
         }
-        std::cout << "done loop" << std::endl;
+        //std::cout << "done loop" << std::endl;
         std::stringstream ss;
         //std::cout << "10" << std::endl;
         ss << "CartPole - End of exploit + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
