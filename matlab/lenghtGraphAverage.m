@@ -1,7 +1,8 @@
 %consts
-numberOfExps=1;
+numberOfExps=100;
+name='h1a';
 %read data
-filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\AMAAS\\results\\d\\overall\\final+poleSteps.csv');
+filename=sprintf('C:\\Users\\Adam\\Documents\\NetBeansProjects\\aamasResults\\%s\\overall\\final+poleSteps.csv',name)
 data=csvread(filename);%get data
 data = data(1:(length(data)-1));%drop last ellement 0
 outData=zeros(1,length(data)/numberOfExps);%where to ave data

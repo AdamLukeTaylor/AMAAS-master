@@ -23,14 +23,16 @@
 #include <vld.h>
 
 using namespace std;
-
+double exploitePoleSource();
 double exploiteCartPole();
 int poleRun(int number);
 double exploiteMtCar();
 int carRun(int number);
 void duelRun(int number);
+void twoCartRun(int number);
 void setCarAgentForRun(double alpha, double gamma);
 void setPoleAgentForRun(double alpha, double gamma);
+void setPoleSourceAgentForRun(double alpha, double gamma);
 void finaliseData();
 void initData();
 void writeData(std::string fileName, bool end, std::string tag);
@@ -46,6 +48,15 @@ int poleLoopCounter = 0;
 int poleStepCount = 0;
 int poleCurrentMax = 0;
 
+CartPoleAgent *poleAgentSource;
+CartPole *poleSource;
+int poleSourceCurrentAction = 0;
+double poleSourceAveFallTime = 0;
+int poleSourceNumberOfFalls = 0;
+int poleSourceLoopCounter = 0;
+int poleSourceStepCount = 0;
+int poleSourceCurrentMax = 0;
+
 int carLoopCounter = 0;
 MtCar* car;
 MtCarAgent* carAgent;
@@ -55,6 +66,7 @@ int carAverageTime = 0;
 int carCurrentMin = INT_MAX;
 
 std::vector<int> poleSteps;
+std::vector<int> poleSourceSteps;
 std::vector<int> carSteps;
 double poleResults[Constants::NUMBER_OF_ALPHAS][Constants::NUMBER_OF_GAMMAS];
 double poleFalls[Constants::NUMBER_OF_ALPHAS][Constants::NUMBER_OF_GAMMAS]; //dosent really add anytghing as pole alwasys fals
@@ -70,7 +82,7 @@ int currentGamma = 0;
 //thes3 keep track of what we are doing
 std::string expName[] = {
     "eval",
-    "b1c"//f 10, .001
+    "i1a"//f 10, .001
 }; //e =reabward 1 fg2= reward 2 g= 1 tst not 3
 int expNumber = 1;
 
@@ -177,8 +189,9 @@ int main(int argc, char** argv)
     std::string filename = "";
 
     //for (currentAlpha = 0; currentAlpha < Constants::NUMBER_OF_ALPHAS; currentAlpha++)
-    {
+    /*{//cart to pole
         bool loadMapping = true;
+        bool chosenMapping = true;
         //currentAlpha = 8;
         cout << "--------------- run " << currentAlpha << "-----------------------\n";
         //for (currentGamma = 0; currentGamma < Constants::NUMBER_OF_GAMMAS; currentGamma++)
@@ -190,13 +203,22 @@ int main(int argc, char** argv)
                 setCarAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
                 setPoleAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
                 carAgent->addMapping("MtCar+MtCar", "CartPole+CartPole", carAgent->getLocalQTables().front(), poleAgent->getLocalQTables().front());
-                if (loadMapping && currentRun > 0)
+                if (false && loadMapping && currentRun > 0)
                 {//if we've run befor load mapping
                     std::stringstream ss;
                     ss << "before";
                     carAgent->printMappings(ss.str(), 1, expName[expNumber]);
                     ss.str("");
                     ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//MtCar+MtCar to CartPole+CartPole reuse-mapping.txt." << expName[expNumber] << ".stats";
+                    carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", ss.str());
+                }
+                if (true || chosenMapping && currentRun == 0)
+                {//load up a previous mapping
+                    std::stringstream ss;
+                    ss << "before";
+                    carAgent->printMappings(ss.str(), 1, expName[expNumber]);
+                    ss.str("");
+                    ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//c1a182goodmapping.txt";
                     carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", ss.str());
                 }
                 //int toRun = (currentRun / numberOfTimes) + 1;
@@ -230,6 +252,69 @@ int main(int argc, char** argv)
             //ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//results//" << expName[expNumber] << "//a=" << currentAlpha << "b=" << currentGamma;
             ///runJava(ss.str());
         }
+    }*/
+
+    bool loadMapping = true;
+    bool chosenMapping = true;
+    //currentAlpha = 8;
+    cout << "--------------- run " << currentAlpha << "-----------------------\n";
+    //for (currentGamma = 0; currentGamma < Constants::NUMBER_OF_GAMMAS; currentGamma++)
+    //currentGamma = 8;
+    {//set results
+        int numberOfTimes = 1; //Constants::NUMBER_OF_EXPS * numberOfTimes
+        for (currentRun = 0; currentRun < Constants::NUMBER_OF_EXPS * numberOfTimes; currentRun++)
+        {
+            setPoleSourceAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
+            setPoleAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
+            poleAgentSource->addMapping("CartPoleSource+CartPoleSource", "CartPole+CartPole", poleAgentSource->getLocalQTables().front(), poleAgent->getLocalQTables().front());
+            if (false && loadMapping && currentRun > 0)
+            {//if we've run befor load mapping
+                std::stringstream ss;
+                ss << "before";
+                carAgent->printMappings(ss.str(), 1, expName[expNumber]);
+                ss.str("");
+                ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//MtCar+MtCar to CartPole+CartPole reuse-mapping.txt." << expName[expNumber] << ".stats";
+                carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", ss.str());
+            }
+            if (false && chosenMapping && currentRun == 0)
+            {//load up a previous mapping
+                std::stringstream ss;
+                ss << "before";
+                carAgent->printMappings(ss.str(), 1, expName[expNumber]);
+                ss.str("");
+                ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//c1a182goodmapping.txt";
+                carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", ss.str());
+            }
+            //int toRun = (currentRun / numberOfTimes) + 1;
+            //std::cout << toRun << "=torun\n";
+            //std::cout << "1" << std::endl;
+            twoCartRun(Constants::CAR_TRAINING_STEPS); //(currentRun + 3) / 3);                
+            //std::cout << "2" << std::endl;
+            //carSteps.push_back(carRun(toRun));
+            //poleSteps.push_back(poleRun(toRun));
+            std::stringstream ss;
+            ss << "s=CartPoleSource+CartPoleSource " << "t= CartPole+CartPole " << currentRun;
+            poleAgentSource->printMappings(ss.str(), 1, expName[expNumber]);
+            ss.str("");
+            ss << "reuse";
+            poleAgentSource->printMappings(ss.str(), 1, expName[expNumber]);
+            cout << "currentRun= " << (currentRun + 1) << "\n";
+            cleanUp();
+            std::stringstream ss1;
+            ss1 << "run " << (currentRun + 1);
+            writeData(ss1.str(), false, expName[expNumber]); //write out polefall times
+        }
+
+
+
+        //carAgent->writePolicies("end");
+        //poleAgent->writePolicies("end");
+        //put out stats
+        //std::stringstream ss;
+        //ss << filename.c_str();
+        //ss.str("");
+        //ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//results//" << expName[expNumber] << "//a=" << currentAlpha << "b=" << currentGamma;
+        ///runJava(ss.str());
     }
 
     std::stringstream ss;
@@ -332,6 +417,24 @@ void setPoleAgentForRun(double alpha, double gamma)
     poleLoopCounter = 0;
     poleStepCount = 0;
     poleCurrentMax = 0;
+
+}
+
+/*
+reset the car stats*/
+void setPoleSourceAgentForRun(double alpha, double gamma)
+{
+    poleSource = new CartPole();
+    poleAgentSource = new CartPoleAgent("CartPoleSource");
+    //std::cout << "setting poleAgent to a= " << alpha << " and g= " << gamma << std::endl;
+    poleAgentSource->changeAlphaGamma(alpha, gamma);
+
+    poleSourceCurrentAction = 0;
+    poleSourceAveFallTime = 0;
+    poleSourceNumberOfFalls = 0;
+    poleSourceLoopCounter = 0;
+    poleSourceStepCount = 0;
+    poleSourceCurrentMax = 0;
 
 }
 
@@ -576,6 +679,146 @@ void duelRun(int number)
 }
 
 /*
+run the pole and pole until it has finished 200 times*/
+void twoCartRun(int number)
+{
+    int breakRun;
+    if (number < Constants::CAR_MAX)
+    {
+
+        breakRun = Constants::CAR_MAX;
+    }
+    else
+    {
+        breakRun = number;
+    }
+    bool useTL = !false;
+    bool poleLearn = false;
+    bool interTest = !true;
+    bool limitTraining = true;
+    poleAgent->setUsingTransferLearning(true);
+    poleAgentSource->setUsingTransferLearning(true);
+    poleAgentSource->manageLearning(true, true);
+    poleAgentSource->changeActionSelectionTemperature(100);
+    poleAgentSource->chooseActionSelectionMethod(false, false, !false);
+    poleAgent->changeActionSelectionTemperature(100);
+    poleAgent->manageLearning(poleLearn, true);
+    poleAgent->chooseActionSelectionMethod(false, false, !false);
+    std::cout << "training until poleSource finishes " << number << " steps\n";
+    while (poleSourceLoopCounter < number)//Constants::CAR_TRAINING_STEPS)// * number + 10000) //while (carFinishCount < Constants::CAR_TRAINING)//Constants::CAR_TRAINING * (currentRun + 1)*10)//
+    { //init agents
+        for (;; poleSourceLoopCounter++)
+        {
+            if (limitTraining && poleSourceLoopCounter > number)
+            {
+                break;
+            }
+            poleSourceStepCount++;
+            poleStepCount++;
+            //run a step for the car
+            int poleSourceAction = atoi(poleAgentSource->nominate().c_str());
+            poleSource->executeAction(poleSourceAction);
+            //cout << "action = " << carAction << " execute: " << carActionResult << "\n";
+            poleAgentSource->updateLocal(poleSource->getState());
+            poleAgentSource->finishRun();
+            //run a step for thee pole
+            poleCurrentAction = atoi(poleAgent->nominate().c_str());
+            //std::cout << "pre execute\n";
+            //pole->printState();
+            //std::cout << "action " << poleCurrentAction << "\n";
+            //std::cout << poleCurrentAction;
+            //see what happened with that action
+            pole->executeAction(poleCurrentAction);
+            // std::cout << "post execute\n";pole->printState();
+            //learn from that
+            std::string poleState = pole->getCurrentState();
+            poleAgent->updateLocal(poleState);
+            poleAgent->finishRun();
+            if (useTL)
+            {
+                //finished runs now transfer
+                std::string transfer = poleAgentSource->transferToAllFromAll();
+                //std::cout << transfer << " =transfer\n";
+                poleAgent->readTransferedInfoIn(transfer);
+                //now feedback
+                //std::cout << " about to feedback from pole\n";
+                std::string feedback = poleAgent->sendFeedback();
+                poleAgentSource->sendFeedback(); //just to clear vector
+                //std::cout << "|" << feedback << " =feedback\n";
+                poleAgentSource->recieveFeedback(feedback);
+                //lern from feedback
+                poleAgentSource->updateLearnedMappingFromTarget();
+            }
+            if (pole->getCurrentState() == "-1")
+            {//see if fell over
+                //cout << "Trial " << numberOfFalls << " lasted " << stepCount << " steps\n";
+                //cart->printState();
+                poleAveFallTime += poleStepCount;
+                poleStepCount = 0;
+                poleNumberOfFalls++;
+                pole->randReset();
+                //std::cout << "poll finished\n";
+
+            }
+            if (poleSource->getCurrentState() == "-1" || poleSourceLoopCounter > breakRun)
+            {
+                poleAgentSource->updateLocal(poleSource->getState());
+                //cout << "Finished it took " << carThisRunTime << " timesteps\n";
+                poleSourceAveFallTime += poleSourceStepCount;
+                poleSourceStepCount = 0;
+                poleSourceNumberOfFalls++;
+                //exit(0);
+                poleSource->reset(); //reset to not random pos
+                break;
+
+            }
+        }
+    }
+    cout << "Finished here " << poleSourceNumberOfFalls << "\n";
+    if (poleSourceNumberOfFalls == 0)
+    {
+        std::cout << "C'est possible l'error ici, voitureFinniNumbre est zero\n";
+        poleSourceNumberOfFalls++;
+    }
+    poleSourceAveFallTime = poleSourceAveFallTime / poleSourceNumberOfFalls;
+    std::cout << "poleSource fell " << poleSourceNumberOfFalls << " times averageing " << poleSourceAveFallTime << " this was " << carLoopCounter << " steps total\n";
+    std::stringstream ss;
+    ss << "poleSource - End of explore + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
+    poleAgentSource->writePolicies(ss.str(), expName[expNumber]);
+    std::stringstream ss1;
+    ss1 << " - a = " << currentAlpha << " g = " << currentGamma << " run = " << currentRun;
+    poleAgentSource->printReward(ss1.str(), expName[expNumber]);
+    //carAgent->writePolicies("End");
+    //cout << "2Finished\n";
+
+    poleAveFallTime = (poleAveFallTime / poleNumberOfFalls);
+    cout << "Fell " << poleNumberOfFalls << " times averaging " << poleAveFallTime << " steps per fall\n";
+    std::stringstream ss2;
+    ss2 << "CartPole - End of explore + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
+    poleAgent->writePolicies(ss2.str(), expName[expNumber]);
+    //std::cout << "returned" << std::endl;
+    std::stringstream ss3;
+    ss3 << " - a = " << currentAlpha << " g = " << currentGamma << " run = " << currentRun;
+    poleAgent->printReward(ss3.str(), expName[expNumber]);
+    //std::cout << "about to exploit" << std::endl;
+    if (false == interTest)
+    {
+        int exploitePole = exploiteCartPole();
+        //std::cout << "end cartpole explot\n";
+        int expPoleSource = exploitePoleSource();
+        //std::cout << "end mt car explot\n";
+        poleResults[currentAlpha][currentGamma] += exploitePole;
+        poleSteps.push_back(exploitePole); //save the record
+        poleSourceSteps.push_back(expPoleSource);
+        poleFalls[currentAlpha][currentGamma] = poleNumberOfFalls;
+    }
+
+
+    //return exploiteMtCar();
+    // std::cout << "end duel run\n";
+}
+
+/*
 use what has been learned on the car
 returns what is the min seen if multiple calls*/
 double exploiteMtCar()
@@ -811,6 +1054,107 @@ double exploiteCartPole()
     return totalStepCount;
 }
 
+/*use what has been learned on the cart poll*/
+double exploitePoleSource()
+{
+    double totalStepCount = 0;
+    try
+    {
+
+        for (int a = 0; a < Constants::NUMBER_OF_CART_POLE_EXPLOITE_RUNS; a++)
+        {
+            std::cout << "new exploit run" << std::endl;
+            poleAgentSource->changeActionSelectionTemperature(1);
+            poleAgentSource->setUsingTransferLearning(false);
+            poleAgentSource->manageLearning(!true, !true);
+            poleAgentSource->chooseActionSelectionMethod(false, false, !false);
+            //exploit
+            //  std::cout << "after set" << std::endl;
+            poleSourceLoopCounter = 0;
+            int stepCount = 0;
+            {//if not finished running
+                poleSource->reset();
+                //   std::cout << "1" << std::endl;
+                for (;; poleSourceLoopCounter++)
+                {//run for a time
+
+                    if (poleSourceLoopCounter % Constants::CAR_MAX == 0 && poleSourceLoopCounter != 0)
+                    {//if still ballencing heratbeat
+                        cout << "Source It took " << stepCount << " steps and didnt fall\n";
+                        // pole->printState();
+                        break;
+                    }
+                    //choose action
+                    poleSourceCurrentAction = atoi(poleAgentSource->nominate().c_str());
+                    //std::cout << poleCurrentAction << ",";
+                    //pole->printState();
+                    // std::cout << "2" << std::endl;
+                    //see what happened with that action
+                    poleSource->executeAction(poleSourceCurrentAction);
+                    //std::cout << poleCurrentAction;
+                    //std::cout << "3" << std::endl;
+                    //learn from that
+                    poleAgentSource->updateLocal(poleSource->getCurrentState());
+                    poleAgentSource->finishRun();
+                    //cout << "Agent nominated " << poleCurrentAction << " in " << pole->getCurrentState() << "\n";
+                    //std::cout << "4" << std::endl;
+                    if (poleSource->getCurrentState() == "-1")
+                    {//see if fell over
+                        cout << "Source It took " << stepCount << " steps\n";
+                        // pole->printState();
+                        break;
+
+                    }
+                    else
+                    {
+                        //cart->printState();
+                    }
+                    stepCount++;
+                }
+                //learn once more incase it fell
+                std::stringstream ss;
+                //std::cout << "5" << std::endl;
+                ss << poleSource->getBox();
+                // std::cout << "6" << std::endl;
+                std::string poleState = poleSource->getCurrentState();
+                //std::cout << "7" << std::endl;
+                if (poleState.size() <= 0)
+                {
+                    std::cout << "pole error 2 " << carLoopCounter << " actioon= " << poleCurrentAction << "\n";
+                    pole->printState();
+                }
+                poleAgentSource->updateLocal(poleState);
+                //std::cout << "8" << std::endl;
+            }
+            //if (stepCount > poleCurrentMax)//only use if we car baout max
+            {
+
+
+                poleSourceCurrentMax = stepCount;
+                //cout << "Pole test lasted: " << stepCount << " steps\n";
+            }
+            totalStepCount += stepCount;
+        }
+        //std::cout << "done loop" << std::endl;
+        std::stringstream ss;
+        //std::cout << "10" << std::endl;
+        ss << "CartPole Source - End of exploit + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
+        //std::cout << "11" << std::endl;
+        totalStepCount = totalStepCount / Constants::NUMBER_OF_CART_POLE_EXPLOITE_RUNS;
+        poleSource->reset();
+        //poleSteps.push_back(totalStepCount); //save the record
+        //std::cout << "12" << std::endl;
+    }
+    catch (std::bad_alloc& ba)
+    {
+        std::cout << "bad_alloc caught: " << ba.what() << " trying again\n";
+        exit(54234563);
+        /// totalStepCount = exploiteCartPole();
+    }
+    poleAgentSource->finishRun();
+    return totalStepCount;
+}
+
 /*
  * parseValues is to write data at the beginning of file
  */
@@ -961,37 +1305,50 @@ void writeData(std::string fileName, bool end, std::string tag)
             }
         }
         fout2.close();
+
+        //print finshes
+        std::stringstream ss4;
+        ss4.str("");
+        ss4 << fileName << "+poleSteps.csv." << tag << ".stats";
+        ofstream fout3(ss4.str().c_str());
+
+        std::vector<int>::iterator stepsIterator = poleSteps.begin();
+        while (stepsIterator != poleSteps.end())
+        {//for all steps
+
+            fout3 << (*stepsIterator++) << ",";
+        }
+        fout3 << "\r\n";
+        fout3.close();
+        //print finshes
+        std::stringstream ss4a;
+        ss4a.str("");
+        ss4a << fileName << "+poleSourceSteps.csv." << tag << ".stats";
+        ofstream fout4a(ss4a.str().c_str());
+
+        stepsIterator = poleSourceSteps.begin();
+        while (stepsIterator != poleSourceSteps.end())
+        {//for all steps
+
+            fout4a << (*stepsIterator++) << ",";
+        }
+        fout4a << "\r\n";
+        fout4a.close();
+        //print finshes
+
+        std::stringstream ss5;
+        ss5 << fileName << "+carSteps.csv." << tag << ".stats";
+        ofstream fout4(ss5.str().c_str());
+
+        stepsIterator = carSteps.begin();
+        while (stepsIterator != carSteps.end())
+        {//for all steps
+
+            fout4 << (*stepsIterator++) << ",";
+        }
+        fout4 << "\r\n";
+        fout4.close();
     }
-    //print finshes
-    std::stringstream ss;
-    ss.str("");
-    ss << fileName << "+poleSteps.csv." << tag << ".stats";
-    ofstream fout3(ss.str().c_str());
-
-    std::vector<int>::iterator stepsIterator = poleSteps.begin();
-    while (stepsIterator != poleSteps.end())
-    {//for all steps
-
-        fout3 << (*stepsIterator++) << ",";
-    }
-    fout3 << "\r\n";
-    fout3.close();
-
-    //print finshes
-
-    std::stringstream ss1;
-    ss1 << fileName << "+carSteps.csv." << tag << ".stats";
-    ofstream fout4(ss1.str().c_str());
-
-    stepsIterator = carSteps.begin();
-    while (stepsIterator != carSteps.end())
-    {//for all steps
-
-        fout4 << (*stepsIterator++) << ",";
-    }
-    fout4 << "\r\n";
-    fout4.close();
-
     /*poleSteps.clear();
     carSteps.clear();
     vector<int> emptyVectorI;

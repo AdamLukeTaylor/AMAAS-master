@@ -1,6 +1,6 @@
 %consts
-numberOfExps=100;
-name='a3c';
+numberOfExps=1;
+name='i1a';
 carMax=100000;
 poleMin=500;
 %read pole data

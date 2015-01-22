@@ -1691,23 +1691,25 @@ void DWLAgent::readTransferedInfoIn(std::vector<std::pair<std::string, std::pair
                     double outputValue = newValue;
                     bool goodTransfer = false; //what to feed back
                     //std::cout << "values - old " << oldValue << " new " << newValue << "\n";
-                    /*origional used for exps
-                    if (abs(newValue - oldValue) > abs(oldValue / 2))
-                    {//if new value is significantly different add it
-                    outputValue = newValue;
+                    //origional used for exps
+                    if ((((WLearningProcess*) local)->getVisitCount(state, action) < 2) || (abs(newValue - oldValue) > abs(oldValue / 2)))
+                    {//if new value is significantly different add it or if have no idea
+                        outputValue = newValue;
+                        goodTransfer = true;
                     }
                     else
                     {//merge them
 
-                    outputValue = oldValue + ((newValue - oldValue) / 2);
-                    }*/
+                        outputValue = oldValue + ((newValue - oldValue) / 2);
+                        goodTransfer = false;
+                    }
                     //over 5
-                    //if (((WLearningProcess*) local)->getVisitCount(state, action) < 10)
+                    /*if (((WLearningProcess*) local)->getVisitCount(state, action) < 10)
                     {//if only seldom visited take what is offered if not redo the mapping (basicall assum ours better and ask for data elswhere))
                         outputValue = newValue;
                         goodTransfer = true;
                     }
-
+                     */
                     /*if(((WLearningProcess*) local)->getVisitCount(state, action)<5)
                     {
                     outputValue=newValue;
