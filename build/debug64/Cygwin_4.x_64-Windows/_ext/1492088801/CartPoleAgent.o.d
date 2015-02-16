@@ -1,6 +1,8 @@
 build/debug64/Cygwin_4.x_64-Windows/_ext/1492088801/CartPoleAgent.o: \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.h \
+ /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h \
+ /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/DWLAgent.h \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Policy.h \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h \
@@ -13,11 +15,13 @@ build/debug64/Cygwin_4.x_64-Windows/_ext/1492088801/CartPoleAgent.o: \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TaylorSeriesSelection.h \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/CollaborationProcess.h \
  /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TransferMapping.h \
- /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h \
- /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h \
- /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h
+ /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h
 
 /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.h:
+
+/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h:
+
+/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h:
 
 /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/DWLAgent.h:
 
@@ -44,7 +48,3 @@ build/debug64/Cygwin_4.x_64-Windows/_ext/1492088801/CartPoleAgent.o: \
 /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TransferMapping.h:
 
 /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h:
-
-/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.h:
-
-/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/Reward.h:
