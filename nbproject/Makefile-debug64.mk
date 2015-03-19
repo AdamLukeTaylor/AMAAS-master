@@ -84,97 +84,97 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/amaas-master.exe: ${OBJECTFILES}
 ${OBJECTDIR}/_ext/1492088801/CartPole.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1492088801
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/CartPole.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/CartPole.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp
 
 ${OBJECTDIR}/_ext/1492088801/CartPoleAgent.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1492088801
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/CartPoleAgent.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/CartPoleAgent.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp
 
 ${OBJECTDIR}/_ext/1634949378/ActionSelection.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/ActionSelection.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/ActionSelection.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/ActionSelection.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/ActionSelection.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/ActionSelection.cpp
 
 ${OBJECTDIR}/_ext/1634949378/Boltzmann.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Boltzmann.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/Boltzmann.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Boltzmann.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/Boltzmann.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Boltzmann.cpp
 
 ${OBJECTDIR}/_ext/1634949378/CollaborationProcess.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/CollaborationProcess.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/CollaborationProcess.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/CollaborationProcess.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/CollaborationProcess.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/CollaborationProcess.cpp
 
 ${OBJECTDIR}/_ext/1634949378/DWLAgent.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/DWLAgent.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/DWLAgent.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp
 
 ${OBJECTDIR}/_ext/1634949378/EGready.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/EGready.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/EGready.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/EGready.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/EGready.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/EGready.cpp
 
 ${OBJECTDIR}/_ext/1634949378/NeighbourReward.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/NeighbourReward.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/NeighbourReward.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/NeighbourReward.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/NeighbourReward.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/NeighbourReward.cpp
 
 ${OBJECTDIR}/_ext/1634949378/Policy.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Policy.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/Policy.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Policy.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/Policy.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Policy.cpp
 
 ${OBJECTDIR}/_ext/1634949378/QTable.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/QTable.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/QTable.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp
 
 ${OBJECTDIR}/_ext/1634949378/Reward.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Reward.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/Reward.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Reward.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/Reward.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/Reward.cpp
 
 ${OBJECTDIR}/_ext/1634949378/TaylorSeriesSelection.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TaylorSeriesSelection.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/TaylorSeriesSelection.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TaylorSeriesSelection.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/TaylorSeriesSelection.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TaylorSeriesSelection.cpp
 
 ${OBJECTDIR}/_ext/1634949378/TransferMapping.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/TransferMapping.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/TransferMapping.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp
 
 ${OBJECTDIR}/_ext/1634949378/WLearningProcess.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/WLearningProcess.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/WLearningProcess.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp
 
 ${OBJECTDIR}/_ext/1634949378/WTable.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WTable.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1634949378
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/WTable.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WTable.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1634949378/WTable.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WTable.cpp
 
 ${OBJECTDIR}/_ext/1492088801/MtCar.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1492088801
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/MtCar.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/MtCar.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar.cpp
 
 ${OBJECTDIR}/_ext/1492088801/MtCarAgent.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1492088801
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/MtCarAgent.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/MtCarAgent.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCarAgent.cpp
 
 ${OBJECTDIR}/_ext/1492088801/RewardCartPole.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1492088801
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/RewardCartPole.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/RewardCartPole.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp
 
 ${OBJECTDIR}/_ext/1492088801/RewardMtCar.o: /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1492088801
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/RewardMtCar.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.cpp
+	$(COMPILE.cc) -g -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include -I/cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1492088801/RewardMtCar.o /cygdrive/C/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardMtCar.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

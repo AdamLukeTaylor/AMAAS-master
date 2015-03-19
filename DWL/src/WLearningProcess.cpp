@@ -536,7 +536,7 @@ void WLearningProcess::printStateSpace(std::string name, std::string tag)
 }
 
 /**read the policy's state space. with out -q or -w as this adds them*/
-void WLearningProcess::readStateSpace(std::string name)
+void WLearningProcess::readStateSpace(std::string name, std::string tag)
 {
     std::stringstream s1;
     s1 << name; //isolate the correct file
@@ -544,8 +544,8 @@ void WLearningProcess::readStateSpace(std::string name)
     std::stringstream s2;
     s2 << name;
     s2 << "-w";
-    qTable->readStateActionFromFile(s1.str());
-    wTable->readStateActionFromFile(s2.str());
+    qTable->readStateActionFromFile(s1.str(), tag);
+    wTable->readStateActionFromFile(s2.str(), tag);
 }
 
 /**

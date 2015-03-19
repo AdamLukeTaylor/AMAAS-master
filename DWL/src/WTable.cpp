@@ -288,10 +288,13 @@ void WTable::wLearningUpdate(std::string previousStateName, double reward, doubl
  * read from the output of write
  * @param filenameIn
  */
-bool WTable::readStateActionFromFile(std::string filenameIn)
+bool WTable::readStateActionFromFile(std::string filenameIn, std::string tag)
 {
     std::string line;
     filenameIn += ".txt";
+    filenameIn += ".";
+    filenameIn += tag;
+    filenameIn += ".stats";
     //std::cerr<<filenameIn<<"= read filename\n";
     std::ifstream myfile(filenameIn.c_str());
     if (myfile.is_open())

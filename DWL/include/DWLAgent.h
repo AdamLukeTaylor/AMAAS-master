@@ -43,7 +43,7 @@ public:
     std::vector<WTable*> publishLocalPolicies();
     std::string publishLocalPolicies(std::string path, std::string tag);
     // TODO - change Remote to look like Local?
-    void addRemotePolicy(std::string path); //place holder
+    void addRemotePolicy(std::string path, std::string tag); //place holder
     void addRemotePolicy(std::string name, WTable dopIn); //place holder
     void addRemotePolicy(std::string name, std::vector<WTable*> dopIn);
     void addRemotePolicy(std::vector<std::pair<std::string, WTable*> > policies);
@@ -62,7 +62,7 @@ public:
     int numberOfRemotePolicies();
     QTable* replaceActionsInRemoteStateSpace(WTable* wIn);
     void readInComms(std::vector< std::pair< std::string, std::pair<std::string, double> > > input);
-    void readPolicies(std::string name);
+    void readPolicies(std::string name, std::string tag);
     void addNeighbours(std::string name); //place holder change parameter when i no what gridlab does
     int numberOfNeighbours();
     void setUsingTransferLearning(bool usingTransferLearning);
@@ -94,6 +94,8 @@ public:
     std::string sendFeedback();
     void recieveFeedback(std::string input);
     void loadMapping(std::string sourceNameIn, std::string targetNameIn, std::string address);
+    void addMapping(std::string sourceNameIn, std::string targetNameIn, QTable* sourceIn, QTable* targetIn, Reward* sourceRewardIn, Reward* targetRewardIn);
+    void updateLearnedMappingFromAnts();
 protected:
     std::vector<Policy*> localPolicies; //this is the policies this agent has regardless of neighbours
     std::vector<Policy*> remotePolicies; //these are the policies gathered from neighbours

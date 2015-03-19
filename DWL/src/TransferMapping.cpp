@@ -6,12 +6,15 @@
  */
 
 #include "TransferMapping.h"
+#include "Reward.h"
 #include <iostream>
 #include <stdlib.h>
 #include <sstream>
 #include <fstream>
 #include <climits> 
 #include <string.h>
+#include <iterator>
+#include <algorithm>    // std::random_shuffle
 
 TransferMapping::TransferMapping()
 {
@@ -20,8 +23,32 @@ TransferMapping::TransferMapping()
     targetSet = false;
     wSourceSet = false;
     wTargetSet = false;
+    sourceRewardSet = false;
+    targetRewardSet = false;
     sourceName = "";
     TargetName = "";
+}
+
+void TransferMapping::setTargetReward(Reward* targetReward)
+{
+    this->targetReward = targetReward;
+    targetRewardSet = true;
+}
+
+Reward* TransferMapping::getTargetReward() const
+{
+    return targetReward;
+}
+
+void TransferMapping::setSourceReward(Reward* sourceReward)
+{
+    this->sourceReward = sourceReward;
+    sourceRewardSet = true;
+}
+
+Reward* TransferMapping::getSourceReward() const
+{
+    return sourceReward;
 }
 
 TransferMapping::~TransferMapping()
@@ -320,6 +347,22 @@ std::vector<std::pair<std::string, double> > TransferMapping::choosePairsBasedOn
             toAdd.second = winningQs[a];
             output.push_back(toAdd);
         }
+        while (output.size() < numberOfPairs)
+        {//if to small embiggen
+            std::cout << "expanding feed back set\n";
+            std::map<std::pair<std::string, std::string>, int>::iterator item = votes.begin();
+            std::advance(item, rand() % (votes.size()));
+            std::string targetStateAction = (*item).first.second; //get the name for the actuall table
+            std::string sourceStateAction = (*item).first.first;
+            std::string sourceState = sourceStateAction.substr(0, sourceStateAction.find(":"));
+            std::string sourceAction = sourceStateAction.substr(sourceStateAction.find(":") + 1);
+            //find in table
+            double value = qIn->getQValue(sourceState, sourceAction);
+            std::pair < std::string, double > toAdd;
+            toAdd.first = targetStateAction;
+            toAdd.second = value;
+            output.push_back(toAdd);
+        }
         //std::cout << "after print" << std::endl;
         delete[] winningNames;
         delete[] winningVotes;
@@ -614,57 +657,282 @@ void TransferMapping::updateLearnedMappingFromTarget(std::string targetStateToUp
         }
         //std::cout << "4" << std::endl;
     }
-    //check if there are any blank pipes
-    /* if (matchless.size() > 0)
-     {
-         std::pair<std::string, std::pair<std::string, double> > toAdd;
-         std::pair<std::pair<std::string, std::string>, int > toAddInt;
-         std::vector<std::string>::iterator matchlessIterator = matchless.begin();
-         while (matchlessIterator != matchless.end())
-         {//for all lonely states
 
-             //std::cout << "3d" << std::endl;
-             int random = rand() % mappings.size();
-             std::multimap<std::string, std::pair<std::string, double> >::iterator begin = mappings.begin();
-             //std::cout << "18a" << std::endl;
-             for (int z = 0; z < random; z++)
-             {
-                 begin++;
-             }
-             toAdd.first = (*matchlessIterator); //source//the matchless one
-             if (sourceUnallocatedPool.size() > 0)
-             {//if it might be marked as unallocated (should be)
-                 std::vector<std::string>::iterator unallocIt = sourceUnallocatedPool.begin();
-                 while (unallocIt != sourceUnallocatedPool.end())
-                 {//for all in unaloc
-                     if ((*unallocIt) == (*matchlessIterator))
-                     {//found it
-                         sourceUnallocatedPool.erase(unallocIt);
-                         unallocIt = sourceUnallocatedPool.end();
-                     }
-                     else
-                     {
-                         unallocIt++;
-                     }
-                 }
-             }
-             sourceAllocatedPool.push_back(toAdd.first); //mark as allocated
-             toAdd.second.first = (*begin).second.first; //target//a random one
-             toAdd.second.second = 0; //value
-             mappings.insert(toAdd);
-             toAddInt.first.first = toAdd.first;
-             toAddInt.first.second = toAdd.second.first;
-             toAddInt.second = 0;
-             votes.insert(toAddInt);
-             std::cout << "matchless adding " << toAdd.first << " " << toAdd.second.first << "\n";
-             std::cout << "matchless adding " << toAddInt.first.first << " " << toAddInt.first.second << "\n";
+}
+
+/**
+ * change the mapping from the ants persepctive
+ * pick many random states if reward of state is within threshold vote +1 else -1.
+ * if many different actions in state disagree will go with majority rule
+ * reward function is based on state, mapping is based on state action this will lead to inaccuracy but should speed up value convragence and states were actions have similar values
+ * @param stateToUpdate
+ */
+void TransferMapping::runAnts(int antRuns, double threshold)
+{
+    if (sourceRewardSet == false || targetRewardSet == false)
+    {
+        std::cout << "Transfer mapinng run ants something not set\n";
+        exit(5834);
+    }
+    //basically update mapping except instead of getting votes from feedback get random in mappings and sample reward antRuns times and update votes based on rewards
+    for (int loopCounter = 0; loopCounter < antRuns; loopCounter++)
+    {//for the number of ants
+        //std::cout << "1" << std::endl;
+        std::vector<std::string> sourcesOfPipesToTarget;
+        std::multimap<std::string, std::pair<std::string, double> >::iterator mappingsIterator = mappings.begin();
+        int randomPlace = rand() % mappings.size();
+        while (randomPlace > 0)
+        {//move my iterator to random place (i dont trust  it+random)
+            mappingsIterator++;
+            randomPlace--;
+        }
+        //std::cout << "drew: " << mappingsIterator->first << "\nand " << mappingsIterator->second.first.substr(0, mappingsIterator->second.first.find_first_of(":")) << std::endl;
+        //now we have a random mapping see if it is good or walk the ant   
+        sourceReward->calcReward(mappingsIterator->first.substr(0, mappingsIterator->first.find_first_of(":"))); //get reward from source for that state
+        targetReward->calcReward(mappingsIterator->second.first.substr(0, mappingsIterator->second.first.find_first_of(":"))); //get target value
+        double sourceValue = sourceReward->getReward();
+        double targetValue = targetReward->getReward();
+
+        //MAPPING UPDATE RULE
+        //now decide and vote
+        std::pair<std::string, std::string> key;
+        key.first = mappingsIterator->first;
+        key.second = mappingsIterator->second.first;
+        //std::cout << "votes went from " << votes.find(key)->second;
+        if (abs(sourceValue - targetValue) < threshold)
+        {//if good
+            votes.find(key)->second++;
+        }
+        else
+        {
+            sourcesOfPipesToTarget.push_back(mappingsIterator->first); //only need to mark the down voted for deletion
+            votes.find(key)->second--;
+        }
+        //std::cout << " to " << votes.find(key)->second << std::endl;
+        std::string targetStateToUpdate = mappingsIterator->second.first; //for convinience
 
 
-             matchlessIterator++;
-         }
-     }*/
-    // std::cout << "5" << std::endl;
-    //  std::cout << "end update learned mapping" << std::endl;
+
+        //reuse previous mechanics for laziness but care less about actions
+        //now sourcesOfPipesToTarget only has things to be deleted
+        std::vector<std::string>::iterator deleteIterator = sourcesOfPipesToTarget.begin();
+        while (deleteIterator != sourcesOfPipesToTarget.end())
+        {//for all delteable
+            //std::cout << "3a" << std::endl;
+            std::pair<std::multimap<std::string, std::pair<std::string, double> >::iterator, std::multimap<std::string, std::pair<std::string, double> >::iterator > range = mappings.equal_range((*deleteIterator));
+            while (range.first != range.second)
+            {//for all potential pipes
+                // std::cout << (*range.first).first << "  " << (*range.first).second.first << " to deleter points to = " << targetStateToUpdate << std::endl;
+                // std::cout << "3b" << std::endl;
+                if ((*range.first).second.first.find(targetStateToUpdate) != std::string::npos)
+                {//if weve found the right pipe or an action free version
+                    deletedCount++;
+                    //std::cout << "3ba" << std::endl;
+                    //     std::cout << "3bab" << std::endl;
+                    //delete from votes
+                    std::pair<std::string, std::string> toFind;
+                    //     std::cout << "3bac" << std::endl;
+                    toFind.first = (*range.first).first;
+                    //    std::cout << "3bad " << (*range.first).second.first.length() << " " << (*range.first).second.first << std::endl;
+                    toFind.second = (*range.first).second.first;
+                    //std::cout << "deleting " << (*range.first).first << " " << (*range.first).second.first << std::endl;
+                    deleted.insert(std::make_pair(range.first->second.first, range.first->first)); //prevent re-adding one
+                    mappings.erase(range.first); //delete it
+                    //std::cout << "3bae" << std::endl;
+                    if (votes.find(toFind) != votes.end())
+                    {//if it is there
+                        votes.erase(votes.find(toFind));
+                    }
+                    else
+                    {
+                        std::cout << "couldnt find " << toFind.first << "  " << toFind.second << " in votes" << std::endl;
+                        exit(5);
+                    }
+                    // std::cout << "3bb" << std::endl;
+                    //delete from allocpool
+                    std::vector<std::string>::iterator allocIt = sourceAllocatedPool.begin();
+                    while (allocIt != sourceAllocatedPool.end())
+                    {
+                        if (((*deleteIterator) == (*allocIt)))
+                        {//if first match delete
+                            //std::cout << "3bc" << std::endl;
+                            sourceAllocatedPool.erase(allocIt);
+                            //std::cout << "removing one from alloc" << std::endl;
+                            break;
+                        }
+                        allocIt++;
+                    }
+                    //std::cout << "3bd" << std::endl;
+                    //realocate this target to a new pipe
+                    std::pair<std::string, std::pair<std::string, double> > toAdd;
+                    std::pair<std::pair<std::string, std::string>, int > toAddInt;
+                    if (sourceUnallocatedPool.size() > 0)
+                    {//if an unallocated state is available use it
+                        //std::cout << "3d" << std::endl;
+                        int random;
+                        bool newMatch = !true;
+                        std::vector<std::string>::iterator begin;
+                        int tryCount = 0;
+                        while (!newMatch)
+                        {//untill we add one that hasnt been trued
+                            random = rand() % sourceUnallocatedPool.size();
+                            newMatch = true; //assume true
+                            begin = sourceUnallocatedPool.begin();
+                            //     std::cout << "3da" << std::endl;
+                            for (int z = 0; z < random; z++)
+                            {
+                                begin++;
+                            }
+                            //check it wasnt tried already
+                            std::pair < std::multimap<std::string, std::string>::iterator, std::multimap<std::string, std::string>::iterator> range = deleted.equal_range(targetStateToUpdate);
+                            while (range.first != range.second)
+                            {
+                                if ((*range.first).second == (*begin))
+                                {
+                                    //std::cout << "1 already tried adding " << (*range.first).second << " to " << (*range.first).first << "\n";
+                                    newMatch = false;
+                                    tryCount++;
+                                    range.first = range.second;
+                                }
+                                else
+                                {
+                                    range.first++;
+                                }
+                                if (tryCount > sourceUnallocatedPool.size())
+                                {//if tried all just end
+                                    newMatch = true;
+                                    range.first = range.second;
+                                }
+                            }
+                        }
+                        //std::cout << "3db" << std::endl;
+                        toAdd.first = (*begin); //source//a random from sourceUnallocatedPool
+                        //    std::cout << "3dba" << std::endl;
+                        //std::cout << "adding unaloc source (should have action too?) " << toAdd.first << "\n";
+                        sourceUnallocatedPool.erase((sourceUnallocatedPool.begin() + random));
+                        //   std::cout << "3dbb" << std::endl;
+                        sourceAllocatedPool.push_back(toAdd.first); //mark as allocated
+                        //   std::cout << "3dc" << std::endl;
+                        toAdd.second.first = targetStateToUpdate; //target
+                        //std::cout << "adding unaloc target (should have action too?) " << toAdd.second.first << "\n";
+                        toAdd.second.second = 0; //value
+                        mappings.insert(toAdd);
+                        //   std::cout << "3dd" << std::endl;
+                        toAddInt.first.first = toAdd.first;
+                        toAddInt.first.second = toAdd.second.first;
+                        toAddInt.second = 0;
+                        votes.insert(toAddInt);
+                        //std::cout << "3de" << std::endl;
+                        // std::cout << "adding " << toAdd.first << " " << toAdd.second.first << "\n";
+                        // std::cout << "adding " << toAddInt.first.first << " " << toAddInt.first.second << "\n";
+                    }
+                    else
+                    {//use an allocated one
+                        //std::cout << "3e" << std::endl;
+                        if (sourceAllocatedPool.size() == 0)
+                        {
+                            std::cout << "about to except on pool size division" << std::endl;
+                        }
+                        int random;
+                        bool newMatch = !true;
+                        std::vector<std::string>::iterator begin;
+                        int tryCount = 0;
+                        while (!newMatch)
+                        {//untill we add one that hasnt been trued
+                            random = rand() % sourceAllocatedPool.size();
+                            newMatch = true; //assume true
+                            begin = sourceAllocatedPool.begin();
+                            //     std::cout << "3da" << std::endl;
+                            for (int z = 0; z < random; z++)
+                            {
+                                begin++;
+                            }
+                            //check it wasnt tried already
+                            std::pair < std::multimap<std::string, std::string>::iterator, std::multimap<std::string, std::string>::iterator> range = deleted.equal_range(targetStateToUpdate);
+                            while (range.first != range.second)
+                            {
+                                if ((*range.first).second == (*begin))
+                                {
+                                    //std::cout << "2 already tried adding " << (*range.first).second << " to " << (*range.first).first << "\n";
+                                    newMatch = false;
+                                    tryCount++;
+                                    range.first = range.second;
+                                }
+                                else
+                                {
+                                    range.first++;
+                                }
+                                if (tryCount > sourceAllocatedPool.size())
+                                {//if tried all just end
+                                    newMatch = true;
+                                    range.first = range.second;
+                                }
+                            }
+                        }
+                        // std::cout << "+++++++++++++++++++++++++++==================\n";
+                        //  std::cout << "3ea- pool= " << sourceAllocatedPool.size() << " random= " << random << " drew " << (*begin) << std::endl;
+                        if (sourceAllocatedPool.size() == 50)
+                        {
+                            this->printMappingSourceFirst("debug", "error");
+                            exit(356);
+                        }
+                        toAdd.first = (*begin); //source//a random from sourceAllocatedPool
+                        //std::cout << "adding aloc source (should have action too?) " << toAdd.first << "\n";
+                        //std::cout << "3eb" << std::endl;
+                        toAdd.second.first = targetStateToUpdate; //target
+                        //std::cout << "adding aloc target (should have action too?) " << toAdd.second.first << "\n";
+                        toAdd.second.second = 0; //value
+                        sourceAllocatedPool.push_back(toAdd.first); //mark as allocated
+                        mappings.insert(toAdd);
+                        //std::cout << "3ec" << std::endl;
+                        toAddInt.first.first = toAdd.first;
+                        //std::cout << "3ed" << std::endl;
+                        toAddInt.first.second = toAdd.second.first;
+                        toAddInt.second = 0;
+                        //std::cout << "3ee" << std::endl;
+                        votes.insert(toAddInt);
+                        //  std::cout << "adding " << toAdd.first << " " << toAdd.second.first << "\n";
+                        //  std::cout << "adding " << toAddInt.first.first << " " << toAddInt.first.second << "\n";
+                        //  std::cout << "adding " << toAdd.first << " " << toAdd.second.first << "\n";
+                    }//
+                    //std::cout << "3f" << std::endl;
+                    //now check where the just deleted one needs to be in the unallocated pools
+                    allocIt = sourceAllocatedPool.begin();
+                    bool realloc = true;
+                    while (allocIt != sourceAllocatedPool.end())
+                    {
+                        //std::cout << "3g" << std::endl;
+                        if ((*deleteIterator) == (*allocIt))
+                        {//if still in alloc
+                            realloc = false; //do nothing later
+                            //    std::cout << "no need to reallocate" << std::endl;
+                            break;
+                        }
+                        else
+                        {
+                            allocIt++;
+                        }
+                    }
+                    //std::cout << "3h" << std::endl;
+                    if (realloc == true)
+                    {//if no longer in allocated pool
+                        sourceUnallocatedPool.push_back((*deleteIterator));
+                        //  std::cout << "reallocate" << std::endl;
+                    }
+                    range.first = range.second; //end loop
+                    break;
+                }
+                else
+                {
+
+                    range.first++;
+                }
+            }
+            //std::cout << "3aa" << std::endl;
+            deleteIterator++;
+        }
+    }
+    //std::cout << "4" << std::endl;
 }
 
 QTable * TransferMapping::getSource() const
@@ -1231,7 +1499,7 @@ void TransferMapping::printMappingSourceFirst(std::string input, std::string tag
 {
     std::stringstream ss;
     ss << getSourceName() << " to " << getTargetName() << " " << input << "-mapping.txt.stats";
-    std::cerr << "writing " << input << "\n";
+    std::cerr << "printMappingSourceFirst " << input << "\n";
     std::string filename = ss.str();
     if (tag == "error")
     {//if erro no tag
@@ -1275,7 +1543,7 @@ void TransferMapping::printMappingTargetFirst(std::string input, std::string tag
 {
     std::stringstream ss;
     ss << getTargetName() << " to " << getSourceName() << " " << input << "-mapping.txt." << tag << ".stats";
-    //std::cerr << "writing " << filename << "\n";
+    //std::cerr << "printMappingTargetFirst " << ss.str().c_str() << "\n";
     std::ofstream outputfile(ss.str().c_str());
 
     if (outputfile.is_open())

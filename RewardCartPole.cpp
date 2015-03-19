@@ -26,9 +26,46 @@ void RewardCartPole::calcReward()
 
 void RewardCartPole::calcReward(std::string oldState)
 {
-    reward = -0.5;
-    std::cerr << "called calc dummy 5\n";
-    std::exit(1);
+    int current = atoi(oldState.c_str());
+    reward = 0;
+    if (current == -1)
+    {
+        reward = -2000;
+    }
+    else
+    {//reward 1
+        //std::cout << "rewarding state " << oldState << " now " << worldState << std::endl;
+        int begin = oldState.find("&", oldState.find("&") + 1) + 1;
+        std::string angle = oldState.substr(begin, 2);
+        //std::cout << "rewarding state " << worldState << " |" << angle << " with " << reward << std::endl;
+        if (angle[0] == 'S')
+        {//if a little bit either way
+            reward = 1000;
+        }
+        else if (angle[0] == 'L')
+        {//if a little bit either way
+            reward = -1;
+        }
+        else
+        {
+            //reward = -1;
+        }
+
+        begin = oldState.find_last_of("&");
+        std::string speed = oldState.substr(begin);
+        //
+        //std::cout << speed;
+        if (speed[1] == 'S')
+        {//if a little bit either way
+            //reward = reward + 200;
+        }
+        else
+        {
+            // reward = reward - 200;
+        }
+
+        // std::cout << "rewarding state " << oldState << " |" << speed << " with " << reward << std::endl;
+    }
 }
 
 void RewardCartPole::calcReward(std::string oldState, std::string worldState)
@@ -62,7 +99,7 @@ void RewardCartPole::calcReward(std::string oldState, std::string worldState)
     }*/
     if (current == -1)
     {
-        reward = -2;
+        reward = -2000;
     }
     else
     {//reward 1
@@ -72,7 +109,7 @@ void RewardCartPole::calcReward(std::string oldState, std::string worldState)
         //std::cout << "rewarding state " << worldState << " |" << angle << " with " << reward << std::endl;
         if (angle[0] == 'S')
         {//if a little bit either way
-            reward = 1;
+            reward = 1000;
         }
         else if (angle[0] == 'L')
         {//if a little bit either way

@@ -21,7 +21,15 @@ CartPoleAgent::CartPoleAgent(std::string name) : DWLAgent(name)
     rewardCartPole = new RewardCartPole();
 
     // add the local policy to the agent and return a handle to it for creating the state space 
-    std::string policyName = std::string(this->getName() + "+CartPole");
+    std::string policyName;
+    if (name.find("Source") == std::string::npos)
+    {//if not soucre
+        policyName = std::string(this->getName() + "+CartPole");
+    }
+    else
+    {
+        policyName = std::string(this->getName() + "+CartPoleSource");
+    }
     Policy* cartPolePolicy = this->addLocalPolicy(policyName, rewardCartPole);
 
 

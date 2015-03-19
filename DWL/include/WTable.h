@@ -21,7 +21,7 @@ public:
     double getWValue(std::string stateName);
     void setWValue(std::string stateName, double value);
     void writeStateActionToFile(std::string filenameIn, std::string tag);
-    bool readStateActionFromFile(std::string filenameIn);
+    bool readStateActionFromFile(std::string filenameIn, std::string tag);
     void wLearningUpdate(std::string previousStateName, double reward, double maxQForCurrentState, double qForCurrentStateLoosingAction);
     void setGamma(double gamma);
     double getGamma() const;

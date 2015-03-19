@@ -230,7 +230,7 @@ bool DWLAgent::getUsingTransferLearning() const
 /**
  *add what comms gives
  */
-void DWLAgent::addRemotePolicy(std::string path)
+void DWLAgent::addRemotePolicy(std::string path, std::string tag)
 {//TODO add check for adding its self as a remote
 
     //drop the tag
@@ -273,7 +273,7 @@ void DWLAgent::addRemotePolicy(std::string path)
                 bool isThereAlready = false;
                 if (remotePolicies.begin() == remotePolicies.end())
                 {
-                    if (wToAdd->readStateActionFromFile(test))
+                    if (wToAdd->readStateActionFromFile(test, tag))
                     {
                         Policy* policyToAdd = (Policy*)new WLearningProcess(name);
                         policyToAdd->setPolicyName(policyName);
@@ -316,7 +316,7 @@ void DWLAgent::addRemotePolicy(std::string path)
                         //TODO add a check for if already in remote
 
 
-                        if (wToAdd->readStateActionFromFile(test))
+                        if (wToAdd->readStateActionFromFile(test, tag))
                         {
                             Policy* policyToAdd = (Policy*)new WLearningProcess(name);
                             policyToAdd->setPolicyName(policyName);
@@ -665,20 +665,20 @@ void DWLAgent::writePolicies(std::string name, std::string tag)
 
 /** read a file for each policy that lives in this agent
 @param name what to prefix the policies with*/
-void DWLAgent::readPolicies(std::string name)
+void DWLAgent::readPolicies(std::string name, std::string tag)
 {
     std::vector<Policy*>::iterator localIterator = localPolicies.begin();
     while (localIterator != localPolicies.end())
     {
         Policy* policy = *localIterator;
-        ((WLearningProcess*) policy)->readStateSpace(name);
+        ((WLearningProcess*) policy)->readStateSpace(name, tag);
         localIterator++;
     }
     std::vector<Policy*>::iterator remoteIterator = remotePolicies.begin();
     while (remoteIterator != remotePolicies.end())
     {
         Policy* policy = *remoteIterator;
-        ((WLearningProcess*) policy)->readStateSpace(name);
+        ((WLearningProcess*) policy)->readStateSpace(name, tag);
         remoteIterator++;
     }
 }
@@ -763,7 +763,7 @@ void DWLAgent::updateLocal(std::string stateName)
                 test->update(stateName, this->winningAction, 0, false); //doesnt matter what reward is passed as local policies can self-calculate
                 //	std::cerr << "1 " << std::endl;
                 if (usingTransferLearning)
-                {
+                {/*
                     //std::cout << "about to make feedback\n";
                     if (test->getMostRecentReward() > 0)
                     {//if good reward feedback good
@@ -777,6 +777,7 @@ void DWLAgent::updateLocal(std::string stateName)
                         ss << test->getPreviousState() << ":" << test->getCurrentAction();
                         test->provideTransferFeedback(ss.str(), false);
                     }
+                  * */
                 }
             }
             localIterator++;
@@ -978,6 +979,17 @@ void DWLAgent::finishRun()
 
         remoteIterator++;
     }
+#if __cplusplus <= 199711L
+#warning This library code will leak memory in very long runs. Compile for at least a C++11 to include shrink to fit, or ocasionally reinitalise agents
+#else
+    remotePolicies.shrink_to_fit();
+    localPolicies.shrink_to_fit();
+    communications.shrink_to_fit();
+    sugestedActions.shrink_to_fit();
+    mappings.shrink_to_fit();
+    wMappings.shrink_to_fit();
+    rewardLog.shrink_to_fit();
+#endif
 
 }
 
@@ -1063,6 +1075,7 @@ int DWLAgent::numberOfRemotePolicies()
  */
 void DWLAgent::addMapping(std::string sourceNameIn, std::string targetNameIn, QTable* sourceIn, QTable* targetIn)
 {
+
     if (this->usingTransferLearning)
     {
         bool isPresent = false;
@@ -1071,6 +1084,7 @@ void DWLAgent::addMapping(std::string sourceNameIn, std::string targetNameIn, QT
         {
             if (((*mappingIterator)->getSourceName() == sourceNameIn) && ((*mappingIterator)->getTargetName() == targetNameIn))
             {//is there
+                std::cout << "attempting to re-add mapping\n";
                 isPresent = true;
                 mappingIterator = mappings.end();
             }
@@ -1086,6 +1100,57 @@ void DWLAgent::addMapping(std::string sourceNameIn, std::string targetNameIn, QT
             map->setTarget(targetIn);
             map->setTargetName(targetNameIn);
             map->setSourceName(sourceNameIn);
+            map->populateLearningMapping(); //TODO replace this with a populateMappingBySearch
+            this->mappings.push_back(map);
+        }
+
+    }
+    else
+    {
+        std::cerr << "not using transfer learning in DWLAgent so don't try to\n";
+        exit(9867);
+    }
+    //std::cerr<<"mappings = "<<mappings.size()<<"\n";
+}
+
+/**
+ * take in the required information to make one end to end mapping
+ * @param sourceNameIn agent name and policy name
+ * @param tergetNameIn agent name and policy name
+ * @param sourceIn the q table
+ * @param targetIn the q table
+ * @param source reward
+ * @param target reward
+ */
+void DWLAgent::addMapping(std::string sourceNameIn, std::string targetNameIn, QTable* sourceIn, QTable* targetIn, Reward* sourceRewardIn, Reward* targetRewardIn)
+{
+
+    if (this->usingTransferLearning)
+    {
+        bool isPresent = false;
+        std::vector<TransferMapping*>::iterator mappingIterator = mappings.begin();
+        while (mappingIterator != mappings.end())
+        {
+            if (((*mappingIterator)->getSourceName() == sourceNameIn) && ((*mappingIterator)->getTargetName() == targetNameIn))
+            {//is there
+                std::cout << "attempting to re-add mapping\n";
+                isPresent = true;
+                mappingIterator = mappings.end();
+            }
+            else
+            {
+                mappingIterator++;
+            }
+        }
+        if (!isPresent)
+        {//if not there add it
+            TransferMapping* map = new TransferMapping(); //make it and set the things
+            map->setSource(sourceIn);
+            map->setTarget(targetIn);
+            map->setTargetName(targetNameIn);
+            map->setSourceName(sourceNameIn);
+            map->setSourceReward(sourceRewardIn);
+            map->setTargetReward(targetRewardIn);
             map->populateLearningMapping(); //TODO replace this with a populateMappingBySearch
             this->mappings.push_back(map);
         }
@@ -1251,6 +1316,7 @@ std::string DWLAgent::transferToAllFromAll()
         exit(9867);
     }
     std::string output = "";
+    //std::cout << "size= " << vectorVersion.size() << "\n";
     std::vector < std::pair<std::string, std::pair<std::string, double> > >::iterator outputIterator = vectorVersion.begin();
     while (outputIterator != vectorVersion.end())
     {
@@ -1314,12 +1380,13 @@ void DWLAgent::findAllInterestingPairs(std::vector < std::pair<std::string, std:
                     std::pair<std::string, std::pair<std::string, double> > toAdd;
                     toAdd.first = test->getTargetName();
                     std::vector<std::pair<std::string, double> > vect;
-                    if (false || ((WLearningProcess*) (*localIterator))->getBoltzmannTemperature() <= 10)
+                    if (false && ((WLearningProcess*) (*localIterator))->getBoltzmannTemperature() <= 10)
                     {//if small botz be gready
                         vect = test->choosePairsBasedOnVotes(20, 1, ((WLearningProcess*) ((*localIterator)))->getQTable()); //TransferMapping::makePairForMapper(test->mapFromStateToTarget(TransferMapping::makePairForMapper(this->findInterestingPair(policyName)))); //set the pair to pass translated to the neighbours space
                     }
                     else
                     {//if big botz dont be gready
+                        //std::cout << "this one\n";
                         vect = test->choosePairsBasedOnVotes(20, 0, ((WLearningProcess*) ((*localIterator)))->getQTable()); //TransferMapping::makePairForMapper(test->mapFromStateToTarget(TransferMapping::makePairForMapper(this->findInterestingPair(policyName)))); //set the pair to pass translated to the neighbours space
                     }
                     std::vector<std::pair<std::string, double> >::iterator vectIterator = vect.begin();
@@ -1692,7 +1759,8 @@ void DWLAgent::readTransferedInfoIn(std::vector<std::pair<std::string, std::pair
                     bool goodTransfer = false; //what to feed back
                     //std::cout << "values - old " << oldValue << " new " << newValue << "\n";
                     //origional used for exps
-                    if ((((WLearningProcess*) local)->getVisitCount(state, action) < 2) || (abs(newValue - oldValue) > abs(oldValue / 2)))
+
+                    if (newValue > oldValue)
                     {//if new value is significantly different add it or if have no idea
                         outputValue = newValue;
                         goodTransfer = true;
@@ -2022,7 +2090,6 @@ void DWLAgent::printReward(std::string input, std::string tag)
  mode =0 back and forwards, 1=source first -1 = target first*/
 void DWLAgent::printMappings(std::string filename, int mode, std::string tag)
 {
-
     std::vector<TransferMapping*>::iterator mappingIterator = mappings.begin();
     while (mappingIterator != mappings.end())
     {//fort all mappings
@@ -2036,7 +2103,20 @@ void DWLAgent::printMappings(std::string filename, int mode, std::string tag)
         }
         mappingIterator++;
     }
-    // std::cout << "end print mappings\n";
+}
+
+/**
+ * go through all mappings and update them based on ants
+ */
+void DWLAgent::updateLearnedMappingFromAnts()
+{
+    std::vector<TransferMapping*>::iterator mappingIterator = mappings.begin();
+    while (mappingIterator != mappings.end())
+    {//fort all mappings
+        //get this mappings target
+        (*mappingIterator)->runAnts(100, 10);
+        mappingIterator++;
+    }
 }
 
 /**

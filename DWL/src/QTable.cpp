@@ -15,6 +15,7 @@
 #include <fstream>
 #include <cstring>
 #include <limits>
+#include <algorithm>
 
 QTable::QTable()
 {
@@ -95,7 +96,7 @@ void QTable::addStateAction(std::string stateName, std::string actionName, doubl
             if ((*it).second.first.compare(actionName) == 0)
             {//if they match update the q
                 (*it).second.second = value;
-                std::cerr << "in Qtable->addstateActin found state there already= " << stateName << " and action= " << actionName << ", added vakue anyway\n";
+                //std::cerr << "in Qtable->addstateActin found state there already= " << stateName << " and action= " << actionName << ", added vakue anyway\n";
                 valueSet = true;
                 break; //it = stateActionsRange.second;
             }
@@ -191,6 +192,32 @@ std::string QTable::getRandomState()
 }
 
 /**
+ * as long as chage random action has been called will give an action from the random state
+ * @return an action
+ */
+std::string QTable::getRandomAction()
+{
+    std::string output;
+    std::vector<std::pair<std::string, double> > ActionsFromState = this->getActionsFromState(randomState);
+    std::random_shuffle(ActionsFromState.begin(), ActionsFromState.end());
+    output = ActionsFromState[0].first;
+    ActionsFromState.clear();
+    ActionsFromState.shrink_to_fit();
+    return output;
+
+}
+
+int QTable::numberOfStates()
+{
+    int output = 0;
+    for (std::multimap<std::string, std::pair<std::string, double> >::iterator it = qTable.begin(), end = qTable.end(); it != end; it = qTable.upper_bound(it->first))
+    {
+        output++;
+    }
+    return output;
+}
+
+/**
  * get what can be done in one state
  * @param stateName
  * @return the actions and their values
@@ -229,7 +256,7 @@ void QTable::writeStateActionToFile(std::string filenameIn, std::string tag)
         filename = filenameIn + "-q.txt." + tag + ".stats";
     }
 
-    std::cerr << "writing " << filenameIn << "\n";
+    //std::cerr << "writing " << filenameIn << "\n";
     std::ofstream outputfile(filename.c_str());
     //std::cerr<<filename<<"\n";
     if (outputfile.is_open())
@@ -248,7 +275,7 @@ void QTable::writeStateActionToFile(std::string filenameIn, std::string tag)
         std::cerr << "\nQtable->writeStateActionToFile Unable to open file\n";
         exit(89);
     }
-    std::cerr << "done!" << "\n";
+    //std::cerr << "done!" << "\n";
 }
 
 /**
@@ -273,7 +300,7 @@ void QTable::qLearningUpdate(std::string previousStateName, std::string actionNa
     {//go through all actions in this state and see if there is a match
         if ((*it).second.first.compare(actionName) == 0)
         {//if they match do the update      
-            // std::cerr << "Qlearning - " << (*it).first << " + " << (*it).second.first << "'s value " << (*it).second.second;
+            //std::cerr << "Qlearning - " << (*it).first << " + " << (*it).second.first << "'s value " << (*it).second.second;
             //q new =                        q old +                         alpha (reward +gamma (max next action)                                                    - q old)
             //ADDED FOR EXP
             double oldValue = (*it).second.second;
@@ -366,10 +393,13 @@ std::pair<std::string, double> QTable::getBestAction(std::string stateName)
  * read from the output of write
  * @param filenameIn
  */
-void QTable::readStateActionFromFile(std::string filenameIn)
+void QTable::readStateActionFromFile(std::string filenameIn, std::string tag)
 {//std::cerr<<"in readStateActionFromFile\n";
     std::string line;
     filenameIn += ".txt";
+    filenameIn += ".";
+    filenameIn += tag;
+    filenameIn += ".stats";
     std::ifstream myfile(filenameIn.c_str());
     if (myfile.is_open())
     {
@@ -389,6 +419,7 @@ void QTable::readStateActionFromFile(std::string filenameIn)
                 action = action.substr(0, action.find("~~~~"));
                 line = backup;
                 std::string value = line.substr(line.find("~~~~") + 4);
+                //std::cout << state << "  " << action << "  " << value << "\n";
                 this->addStateAction(state, action, atof(value.c_str())); //put it in
                 getline(myfile, line);
             }

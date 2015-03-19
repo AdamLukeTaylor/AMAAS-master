@@ -6,6 +6,7 @@
  */
 #include "QTable.h"
 #include "WTable.h"
+#include "Reward.h"
 #include <map>
 #include <string>
 
@@ -49,6 +50,12 @@ public:
     std::vector<std::pair<std::string, double> > choosePairsBasedOnVotes(int numberOfPairs, double greadiness, QTable* qIn);
     void loadMapping(std::string filename);
     std::vector<std::string> split(std::string s, char delim);
+    void updateBasedOnCurrentVotes();
+    void runAnts(int antRuns, double threshold);
+    void setTargetReward(Reward* targetReward);
+    Reward* getTargetReward() const;
+    void setSourceReward(Reward* sourceReward);
+    Reward* getSourceReward() const;
 private:
     std::string sourceName;
     std::string TargetName;
@@ -56,17 +63,22 @@ private:
     bool targetSet;
     bool wSourceSet;
     bool wTargetSet;
+    bool sourceRewardSet;
+    bool targetRewardSet;
     QTable* source;
     QTable* target;
     WTable* wSource;
     WTable* wTarget;
+    Reward* sourceReward;
+    Reward* targetReward;
     std::multimap<std::string, std::pair<std::string, double> > mappings; //this is source state+action, target state+action, scaling factor for new info
     int deletedCount; //
-    std::map<std::pair<std::string, std::string>, int> votes; //if it should change a mapping
+    std::map<std::pair<std::string, std::string>, int> votes; //if it should change a mapping //state:action,state:action
     std::vector<std::string> sourceUnallocatedPool;
     std::vector<std::string> matchless;
     std::multimap<std::string, std::string> deleted;
     std::vector<std::string> sourceAllocatedPool;
+
     //std::vector<std::pair<std::string, std::string > > outBuffer; //memory of what has been sent from what
 };
 

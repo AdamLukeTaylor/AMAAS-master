@@ -88,9 +88,11 @@
       <compileType>
         <cTool>
           <architecture>1</architecture>
+          <standard>10</standard>
         </cTool>
         <ccTool>
           <architecture>1</architecture>
+          <standard>8</standard>
           <incDir>
             <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include</pElem>
             <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/MtCar</pElem>
@@ -104,11 +106,6 @@
         <asmTool>
           <architecture>1</architecture>
         </asmTool>
-        <linkerTool>
-          <linkerAddLib>
-            <pElem>C:\Program Files (x86)\Visual Leak Detector\bin\Win32</pElem>
-          </linkerAddLib>
-        </linkerTool>
       </compileType>
       <item path="C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp"
             ex="false"
@@ -542,9 +539,11 @@
       <compileType>
         <cTool>
           <architecture>2</architecture>
+          <standard>10</standard>
         </cTool>
         <ccTool>
           <architecture>2</architecture>
+          <standard>8</standard>
           <incDir>
             <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include</pElem>
             <pElem>C:/Users/Adam/Documents/NetBeansProjects/AMAAS-maste/MtCar</pElem>

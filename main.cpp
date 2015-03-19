@@ -20,7 +20,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <vld.h>
+//#include <vld.h>
 
 using namespace std;
 double exploitePoleSource();
@@ -50,6 +50,7 @@ int poleCurrentMax = 0;
 
 CartPoleAgent *poleAgentSource;
 CartPole *poleSource;
+bool reuseStateSpace = !true;
 int poleSourceCurrentAction = 0;
 double poleSourceAveFallTime = 0;
 int poleSourceNumberOfFalls = 0;
@@ -82,7 +83,7 @@ int currentGamma = 0;
 //thes3 keep track of what we are doing
 std::string expName[] = {
     "eval",
-    "i1a"//f 10, .001
+    "test2"//f 10, .001
 }; //e =reabward 1 fg2= reward 2 g= 1 tst not 3
 int expNumber = 1;
 
@@ -99,6 +100,7 @@ int main(int argc, char** argv)
     {
         gammas[a] = ((double) a) / (Constants::NUMBER_OF_GAMMAS);
     }
+
     //test transfer
     /* setCarAgentForRun(.5, .5);
      setPoleAgentForRun(.5, .5);
@@ -253,28 +255,38 @@ int main(int argc, char** argv)
             ///runJava(ss.str());
         }
     }*/
-
-    bool loadMapping = true;
-    bool chosenMapping = true;
+    reuseStateSpace = !false;
+    bool loadMapping = !true;
+    bool chosenMapping = !true;
     //currentAlpha = 8;
     cout << "--------------- run " << currentAlpha << "-----------------------\n";
     //for (currentGamma = 0; currentGamma < Constants::NUMBER_OF_GAMMAS; currentGamma++)
     //currentGamma = 8;
     {//set results
-        int numberOfTimes = 1; //Constants::NUMBER_OF_EXPS * numberOfTimes
+        int numberOfTimes = 5; //Constants::NUMBER_OF_EXPS * numberOfTimes
         for (currentRun = 0; currentRun < Constants::NUMBER_OF_EXPS * numberOfTimes; currentRun++)
         {
             setPoleSourceAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
             setPoleAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
-            poleAgentSource->addMapping("CartPoleSource+CartPoleSource", "CartPole+CartPole", poleAgentSource->getLocalQTables().front(), poleAgent->getLocalQTables().front());
-            if (false && loadMapping && currentRun > 0)
+
+            if (false && loadMapping && currentRun > 0)//never load mapping as agent still lives
             {//if we've run befor load mapping
+                //make a mapping box
+                poleAgentSource->addMapping("CartPoleSource+CartPoleSource", "CartPole+CartPole", poleAgentSource->getLocalQTables().front(), poleAgent->getLocalQTables().front(), new RewardCartPole(), new RewardCartPole());
+                //now read it in
                 std::stringstream ss;
                 ss << "before";
-                carAgent->printMappings(ss.str(), 1, expName[expNumber]);
+                poleAgentSource->printMappings(ss.str(), 1, expName[expNumber]);
                 ss.str("");
-                ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//MtCar+MtCar to CartPole+CartPole reuse-mapping.txt." << expName[expNumber] << ".stats";
-                carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", ss.str());
+                ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//CartPoleSource+CartPoleSource to CartPole+CartPole reuse-mapping.txt." << expName[expNumber] << ".stats";
+                poleAgentSource->loadMapping("CartPoleSource+CartPoleSource", "CartPole+CartPole", ss.str());
+            }
+            else
+            {//if not loading a mapping or first run create one
+                if (reuseStateSpace == false || currentRun == 0)
+                {//we dont have a mappping from previous run
+                    poleAgentSource->addMapping("CartPoleSource+CartPoleSource", "CartPole+CartPole", poleAgentSource->getLocalQTables().front(), poleAgent->getLocalQTables().front(), new RewardCartPole(), new RewardCartPole());
+                }
             }
             if (false && chosenMapping && currentRun == 0)
             {//load up a previous mapping
@@ -285,24 +297,32 @@ int main(int argc, char** argv)
                 ss << "C://Users//Adam//Documents//NetBeansProjects//AMAAS-master//c1a182goodmapping.txt";
                 carAgent->loadMapping("MtCar+MtCar", "CartPole+CartPole", ss.str());
             }
-            //int toRun = (currentRun / numberOfTimes) + 1;
-            //std::cout << toRun << "=torun\n";
+            //run it
+            twoCartRun(Constants::CART_POLE_TRAINING_FALLS); //* ((currentRun / numberOfTimes) + 1));
+
             //std::cout << "1" << std::endl;
-            twoCartRun(Constants::CAR_TRAINING_STEPS); //(currentRun + 3) / 3);                
-            //std::cout << "2" << std::endl;
-            //carSteps.push_back(carRun(toRun));
-            //poleSteps.push_back(poleRun(toRun));
             std::stringstream ss;
             ss << "s=CartPoleSource+CartPoleSource " << "t= CartPole+CartPole " << currentRun;
             poleAgentSource->printMappings(ss.str(), 1, expName[expNumber]);
-            ss.str("");
-            ss << "reuse";
-            poleAgentSource->printMappings(ss.str(), 1, expName[expNumber]);
-            cout << "currentRun= " << (currentRun + 1) << "\n";
+            //std::cout << "2" << std::endl;
+
+            if (loadMapping)
+            {//if we will want to load a mapping
+                ss.str("");
+                ss << "reuse";
+                poleAgentSource->printMappings(ss.str(), 1, expName[expNumber]);
+            }
+            if (reuseStateSpace)
+            {//write this incase we want to reuse it
+                ss.str("");
+                ss.str("Policy");
+                poleAgentSource->writePolicies(ss.str(), expName[expNumber]);
+            }
             cleanUp();
             std::stringstream ss1;
             ss1 << "run " << (currentRun + 1);
             writeData(ss1.str(), false, expName[expNumber]); //write out polefall times
+            cout << "--------------- next round " << (currentRun + 1) << " -----------------------\n";
         }
 
 
@@ -337,9 +357,16 @@ void cleanUp()
     //cout << "b" << std::endl;
     delete carAgent;
     //cout << "c" << std::endl;
+
     delete pole;
     //cout << "d" << std::endl;
     delete poleAgent;
+    if (reuseStateSpace == false)
+    {//if false delete old
+        delete poleSource;
+        //cout << "d" << std::endl;
+        delete poleAgentSource;
+    }
     //cout << "e" << std::endl;
 }
 
@@ -424,8 +451,11 @@ void setPoleAgentForRun(double alpha, double gamma)
 reset the car stats*/
 void setPoleSourceAgentForRun(double alpha, double gamma)
 {
-    poleSource = new CartPole();
-    poleAgentSource = new CartPoleAgent("CartPoleSource");
+    if (reuseStateSpace == false || currentRun < 1)
+    {
+        poleSource = new CartPole();
+        poleAgentSource = new CartPoleAgent("CartPoleSource");
+    }
     //std::cout << "setting poleAgent to a= " << alpha << " and g= " << gamma << std::endl;
     poleAgentSource->changeAlphaGamma(alpha, gamma);
 
@@ -511,127 +541,114 @@ void duelRun(int number)
     poleAgent->changeActionSelectionTemperature(100);
     poleAgent->manageLearning(poleLearn, true);
     poleAgent->chooseActionSelectionMethod(false, false, !false);
+
     std::cout << "training until car finishes " << number << " steps\n";
     while (carLoopCounter < number)//Constants::CAR_TRAINING_STEPS)// * number + 10000) //while (carFinishCount < Constants::CAR_TRAINING)//Constants::CAR_TRAINING * (currentRun + 1)*10)//
     { //init agents
-        for (;; carLoopCounter++)
+        carLoopCounter++;
+        if (limitTraining && carLoopCounter > number)
         {
-            if (limitTraining && carLoopCounter > number)
-            {
-                break;
+            std::cout << "Hit the limit" << " on steps\n";
+            break;
+        }
+        //for intermediate testing
+        if (interTest)
+        {
+            if (carLoopCounter < Constants::TEST_FREQ && carLoopCounter % (Constants::TEST_FREQ / 10) == 0)
+            {//more frequent init testing
+                int loopBK = carLoopCounter;
+                std::cout << "Count " << carLoopCounter << "\n";
+                int exploitePole = exploiteCartPole();
+                int exploiteCar = exploiteMtCar();
+                poleSteps.push_back(exploitePole);
+                carSteps.push_back(exploiteCar);
+                poleAgent->setUsingTransferLearning(true);
+                carAgent->setUsingTransferLearning(true);
+                carAgent->manageLearning(true, true);
+                carAgent->changeActionSelectionTemperature(100);
+                carAgent->chooseActionSelectionMethod(false, false, !false);
+                poleAgent->changeActionSelectionTemperature(100);
+                poleAgent->manageLearning(poleLearn, true);
+                poleAgent->chooseActionSelectionMethod(false, false, !false);
+                carLoopCounter = loopBK + 1;
+                stringstream ss;
+                ss << "CartPole - End of explore + a= " << currentAlpha << " g= " << currentGamma << " loop= " << carLoopCounter;
+                poleAgent->writePolicies(ss.str(), expName[expNumber]);
             }
-            //for intermediate testing
-            if (interTest)
+            else if (carLoopCounter > 0 && carLoopCounter % Constants::TEST_FREQ == 0)
             {
-                if (carLoopCounter < Constants::TEST_FREQ && carLoopCounter % (Constants::TEST_FREQ / 10) == 0)
-                {//more frequent init testing
-                    int loopBK = carLoopCounter;
-                    std::cout << "Count " << carLoopCounter << "\n";
-                    int exploitePole = exploiteCartPole();
-                    int exploiteCar = exploiteMtCar();
-                    poleSteps.push_back(exploitePole);
-                    carSteps.push_back(exploiteCar);
-                    poleAgent->setUsingTransferLearning(true);
-                    carAgent->setUsingTransferLearning(true);
-                    carAgent->manageLearning(true, true);
-                    carAgent->changeActionSelectionTemperature(100);
-                    carAgent->chooseActionSelectionMethod(false, false, !false);
-                    poleAgent->changeActionSelectionTemperature(100);
-                    poleAgent->manageLearning(poleLearn, true);
-                    poleAgent->chooseActionSelectionMethod(false, false, !false);
-                    carLoopCounter = loopBK + 1;
-                    stringstream ss;
-                    ss << "CartPole - End of explore + a= " << currentAlpha << " g= " << currentGamma << " loop= " << carLoopCounter;
-                    poleAgent->writePolicies(ss.str(), expName[expNumber]);
-                }
-                else if (carLoopCounter > 0 && carLoopCounter % Constants::TEST_FREQ == 0)
-                {
-                    int loopBK = carLoopCounter;
-                    std::cout << "2 Count " << carLoopCounter << "\n";
-                    int exploitePole = exploiteCartPole();
-                    int exploiteCar = exploiteMtCar();
-                    poleSteps.push_back(exploitePole);
-                    carSteps.push_back(exploiteCar);
-                    poleAgent->setUsingTransferLearning(true);
-                    carAgent->setUsingTransferLearning(true);
-                    carAgent->manageLearning(true, true);
-                    carAgent->changeActionSelectionTemperature(100);
-                    carAgent->chooseActionSelectionMethod(false, false, !false);
-                    poleAgent->changeActionSelectionTemperature(100);
-                    poleAgent->manageLearning(poleLearn, true);
-                    poleAgent->chooseActionSelectionMethod(false, false, !false);
-                    carLoopCounter = loopBK + 1;
-                    stringstream ss;
-                    ss << "CartPole - End of explore + a= " << currentAlpha << " g= " << currentGamma << " loop= " << carLoopCounter;
-                    poleAgent->writePolicies(ss.str(), expName[expNumber]);
-
-                }
-            }
-
-
-            carThisRunTime++;
-            poleStepCount++;
-            //run a step for the car
-            int carAction = atoi(carAgent->nominate().c_str());
-            bool carActionResult = car->executeAction(carAction);
-            //cout << "action = " << carAction << " execute: " << carActionResult << "\n";
-            carAgent->updateLocal(car->getState());
-            carAgent->finishRun();
-            //run a step for thee pole
-            poleCurrentAction = atoi(poleAgent->nominate().c_str());
-            //std::cout << "pre execute\n";
-            //pole->printState();
-            //std::cout << "action " << poleCurrentAction << "\n";
-            //std::cout << poleCurrentAction;
-            //see what happened with that action
-            pole->executeAction(poleCurrentAction);
-            // std::cout << "post execute\n";pole->printState();
-            //learn from that
-            std::string poleState = pole->getCurrentState();
-            poleAgent->updateLocal(poleState);
-            poleAgent->finishRun();
-
-            if (useTL)
-            {
-                //finished runs now transfer
-                std::string transfer = carAgent->transferToAllFromAll();
-                //std::cout << transfer << " =transfer\n";
-                poleAgent->readTransferedInfoIn(transfer);
-                //now feedback
-                //std::cout << " about to feedback from pole\n";
-                std::string feedback = poleAgent->sendFeedback();
-                carAgent->sendFeedback(); //just to clear vector
-                //std::cout << "|" << feedback << " =feedback\n";
-                carAgent->recieveFeedback(feedback);
-                //lern from feedback
-                carAgent->updateLearnedMappingFromTarget();
-            }
-            if (pole->getCurrentState() == "-1")
-            {//see if fell over
-                //cout << "Trial " << numberOfFalls << " lasted " << stepCount << " steps\n";
-                //cart->printState();
-                poleAveFallTime += poleStepCount;
-                poleStepCount = 0;
-                poleNumberOfFalls++;
-                pole->randReset();
-                //std::cout << "poll finished\n";
-
-            }
-            if (carActionResult == true || carLoopCounter > breakRun)
-            {
-                carAgent->updateLocal(car->getState());
-                //cout << "Finished it took " << carThisRunTime << " timesteps\n";
-
-                carAverageTime += carThisRunTime;
-                carThisRunTime = 0;
-                carFinishCount++;
-                //exit(0);
-                car->reset(!false); //reset to not random pos
-
-                break;
+                int loopBK = carLoopCounter;
+                std::cout << "2 Count " << carLoopCounter << "\n";
+                int exploitePole = exploiteCartPole();
+                int exploiteCar = exploiteMtCar();
+                poleSteps.push_back(exploitePole);
+                carSteps.push_back(exploiteCar);
+                poleAgent->setUsingTransferLearning(true);
+                carAgent->setUsingTransferLearning(true);
+                carAgent->manageLearning(true, true);
+                carAgent->changeActionSelectionTemperature(100);
+                carAgent->chooseActionSelectionMethod(false, false, !false);
+                poleAgent->changeActionSelectionTemperature(100);
+                poleAgent->manageLearning(poleLearn, true);
+                poleAgent->chooseActionSelectionMethod(false, false, !false);
+                carLoopCounter = loopBK + 1;
+                stringstream ss;
+                ss << "CartPole - End of explore + a= " << currentAlpha << " g= " << currentGamma << " loop= " << carLoopCounter;
+                poleAgent->writePolicies(ss.str(), expName[expNumber]);
 
             }
         }
+
+
+        carThisRunTime++;
+        poleStepCount++;
+        //run a step for the car
+        int carAction = atoi(carAgent->nominate().c_str());
+        bool carActionResult = car->executeAction(carAction);
+        //cout << "action = " << carAction << " execute: " << carActionResult << "\n";
+        carAgent->updateLocal(car->getState());
+        carAgent->finishRun();
+        //run a step for thee pole
+        poleCurrentAction = atoi(poleAgent->nominate().c_str());
+        //std::cout << "pre execute\n";
+        //pole->printState();
+        //std::cout << "action " << poleCurrentAction << "\n";
+        //std::cout << poleCurrentAction;
+        //see what happened with that action
+        pole->executeAction(poleCurrentAction);
+        // std::cout << "post execute\n";pole->printState();
+        //learn from that
+        std::string poleState = pole->getCurrentState();
+        poleAgent->updateLocal(poleState);
+        poleAgent->finishRun();
+
+        if (useTL)
+        {
+            //finished runs now transfer
+            std::string transfer = carAgent->transferToAllFromAll();
+            //std::cout << transfer << " =transfer\n";
+            poleAgent->readTransferedInfoIn(transfer);
+            //now feedback
+            //std::cout << " about to feedback from pole\n";
+            std::string feedback = poleAgent->sendFeedback();
+            carAgent->sendFeedback(); //just to clear vector
+            //std::cout << "|" << feedback << " =feedback\n";
+            carAgent->recieveFeedback(feedback);
+            //lern from feedback
+            carAgent->updateLearnedMappingFromTarget();
+        }
+        if (pole->getCurrentState() == "-1")
+        {//see if fell over
+            //cout << "Trial " << carFinishCount << " lasted " << stepCount << " steps\n";
+            //cart->printState();
+            poleAveFallTime += poleStepCount;
+            poleStepCount = 0;
+            poleNumberOfFalls++;
+            pole->reset();
+            //std::cout << "poll finished\n";
+
+        }
+
     }
     cout << "Finished here " << carFinishCount << "\n";
     if (carFinishCount == 0)
@@ -682,20 +699,15 @@ void duelRun(int number)
 run the pole and pole until it has finished 200 times*/
 void twoCartRun(int number)
 {
-    int breakRun;
-    if (number < Constants::CAR_MAX)
-    {
-
-        breakRun = Constants::CAR_MAX;
-    }
-    else
-    {
-        breakRun = number;
-    }
+    int breakRun = number * Constants::CAR_MAX;
     bool useTL = !false;
     bool poleLearn = false;
-    bool interTest = !true;
+    bool interTest = true;
+    int interTestCount = 0;
+    int interTestNumber = 500;
     bool limitTraining = true;
+    bool mappingFeedback = !true;
+    bool mappingAnts = true;
     poleAgent->setUsingTransferLearning(true);
     poleAgentSource->setUsingTransferLearning(true);
     poleAgentSource->manageLearning(true, true);
@@ -704,84 +716,114 @@ void twoCartRun(int number)
     poleAgent->changeActionSelectionTemperature(100);
     poleAgent->manageLearning(poleLearn, true);
     poleAgent->chooseActionSelectionMethod(false, false, !false);
-    std::cout << "training until poleSource finishes " << number << " steps\n";
-    while (poleSourceLoopCounter < number)//Constants::CAR_TRAINING_STEPS)// * number + 10000) //while (carFinishCount < Constants::CAR_TRAINING)//Constants::CAR_TRAINING * (currentRun + 1)*10)//
+    std::cout << "training until poleSource falls " << number << " times\n";
+    while (poleSourceNumberOfFalls < number)//Constants::CAR_TRAINING_STEPS)// * number + 10000) //while (carFinishCount < Constants::CAR_TRAINING)//Constants::CAR_TRAINING * (currentRun + 1)*10)//
     { //init agents
-        for (;; poleSourceLoopCounter++)
+        poleSourceLoopCounter++;
+
+        if (limitTraining && poleSourceLoopCounter > breakRun)
         {
-            if (limitTraining && poleSourceLoopCounter > number)
-            {
-                break;
-            }
-            poleSourceStepCount++;
-            poleStepCount++;
-            //run a step for the car
-            int poleSourceAction = atoi(poleAgentSource->nominate().c_str());
-            poleSource->executeAction(poleSourceAction);
-            //cout << "action = " << carAction << " execute: " << carActionResult << "\n";
-            poleAgentSource->updateLocal(poleSource->getState());
-            poleAgentSource->finishRun();
-            //run a step for thee pole
-            poleCurrentAction = atoi(poleAgent->nominate().c_str());
-            //std::cout << "pre execute\n";
-            //pole->printState();
-            //std::cout << "action " << poleCurrentAction << "\n";
-            //std::cout << poleCurrentAction;
-            //see what happened with that action
-            pole->executeAction(poleCurrentAction);
-            // std::cout << "post execute\n";pole->printState();
-            //learn from that
-            std::string poleState = pole->getCurrentState();
-            poleAgent->updateLocal(poleState);
-            poleAgent->finishRun();
-            if (useTL)
-            {
-                //finished runs now transfer
-                std::string transfer = poleAgentSource->transferToAllFromAll();
-                //std::cout << transfer << " =transfer\n";
-                poleAgent->readTransferedInfoIn(transfer);
-                //now feedback
-                //std::cout << " about to feedback from pole\n";
-                std::string feedback = poleAgent->sendFeedback();
-                poleAgentSource->sendFeedback(); //just to clear vector
-                //std::cout << "|" << feedback << " =feedback\n";
-                poleAgentSource->recieveFeedback(feedback);
-                //lern from feedback
-                poleAgentSource->updateLearnedMappingFromTarget();
-            }
-            if (pole->getCurrentState() == "-1")
-            {//see if fell over
-                //cout << "Trial " << numberOfFalls << " lasted " << stepCount << " steps\n";
-                //cart->printState();
-                poleAveFallTime += poleStepCount;
-                poleStepCount = 0;
-                poleNumberOfFalls++;
-                pole->randReset();
-                //std::cout << "poll finished\n";
-
-            }
-            if (poleSource->getCurrentState() == "-1" || poleSourceLoopCounter > breakRun)
-            {
-                poleAgentSource->updateLocal(poleSource->getState());
-                //cout << "Finished it took " << carThisRunTime << " timesteps\n";
-                poleSourceAveFallTime += poleSourceStepCount;
-                poleSourceStepCount = 0;
-                poleSourceNumberOfFalls++;
-                //exit(0);
-                poleSource->reset(); //reset to not random pos
-                break;
-
-            }
+            break;
         }
+        poleSourceStepCount++;
+        poleStepCount++;
+        //run a step for the car
+        int poleSourceAction = atoi(poleAgentSource->nominate().c_str());
+        poleSource->executeAction(poleSourceAction);
+        //cout << "action = " << carAction << " execute: " << carActionResult << "\n";
+        poleAgentSource->updateLocal(poleSource->getState());
+        poleAgentSource->finishRun();
+        //run a step for thee pole
+        poleCurrentAction = atoi(poleAgent->nominate().c_str());
+        //std::cout << "pre execute\n";
+        //pole->printState();
+        //std::cout << "action " << poleCurrentAction << "\n";
+        //std::cout << poleCurrentAction;
+        //see what happened with that action
+        pole->executeAction(poleCurrentAction);
+        // std::cout << "post execute\n";pole->printState();
+        //learn from that
+        std::string poleState = pole->getState();
+        poleAgent->updateLocal(poleState);
+        poleAgent->finishRun();
+        if (useTL)
+        {
+            if (mappingAnts)poleAgentSource->updateLearnedMappingFromAnts();
+            //finished runs now transfer
+            std::string transfer = poleAgentSource->transferToAllFromAll();
+            //std::cout << transfer << " =transfer\n";
+            poleAgent->readTransferedInfoIn(transfer);
+            //now feedback
+            //std::cout << " about to feedback from pole\n";
+            std::string feedback = poleAgent->sendFeedback();
+            poleAgentSource->sendFeedback(); //just to clear vector
+            //std::cout << "|" << feedback << " =feedback\n";
+            if (mappingFeedback)poleAgentSource->recieveFeedback(feedback);
+            //lern from feedback
+            if (mappingFeedback)poleAgentSource->updateLearnedMappingFromTarget();
+        }
+        //std::cout << "state is " << pole->getCurrentState() << "\n";
+        if (pole->getCurrentState() == "-1")
+        {//see if fell over
+            //cout << "Trial " << numberOfFalls << " lasted " << stepCount << " steps\n";
+            //cart->printState();
+            poleAgent->updateLocal(pole->getState());
+            poleAveFallTime += poleStepCount;
+            poleStepCount = 0;
+            poleNumberOfFalls++;
+            pole->reset();
+            //std::cout << "poll finished\n";
+
+        }
+        if (poleSource->getCurrentState() == "-1")
+        {
+            poleAgentSource->updateLocal(poleSource->getState());
+            //cout << "Finished it took " << carThisRunTime << " timesteps\n";
+            poleSourceAveFallTime += poleSourceStepCount;
+            poleSourceStepCount = 0;
+            poleSourceNumberOfFalls++;
+            //exit(0);
+            poleSource->reset(); //reset to not random pos
+            //std::cout << "poll source finished\n";
+
+        }
+
+        interTestCount++;
+        if (interTest && interTestCount == interTestNumber)
+        {
+            std::cout << "++++++inter test+++++++ at " << poleSourceLoopCounter << "\n";
+            int loopBk = poleSourceLoopCounter;
+            int exploitePole = exploiteCartPole();
+            //std::cout << "end cartpole explot\n";
+            int expPoleSource = exploitePoleSource();
+            //std::cout << "end mt car explot\n";
+            poleResults[currentAlpha][currentGamma] += exploitePole;
+            poleSteps.push_back(exploitePole); //save the record
+            poleSourceSteps.push_back(expPoleSource);
+            poleFalls[currentAlpha][currentGamma] = poleNumberOfFalls;
+            interTestCount = 0;
+            //reset some things
+            poleAgent->setUsingTransferLearning(true);
+            poleAgentSource->setUsingTransferLearning(true);
+            poleAgentSource->manageLearning(true, true);
+            poleAgentSource->changeActionSelectionTemperature(100);
+            poleAgentSource->chooseActionSelectionMethod(false, false, !false);
+            poleAgent->changeActionSelectionTemperature(100);
+            poleAgent->manageLearning(poleLearn, true);
+            poleAgent->chooseActionSelectionMethod(false, false, !false);
+            poleSourceLoopCounter = loopBk;
+            //std::cout << "+++++++++++++\n";
+        }
+
     }
-    cout << "Finished here " << poleSourceNumberOfFalls << "\n";
+
     if (poleSourceNumberOfFalls == 0)
     {
         std::cout << "C'est possible l'error ici, voitureFinniNumbre est zero\n";
         poleSourceNumberOfFalls++;
     }
     poleSourceAveFallTime = poleSourceAveFallTime / poleSourceNumberOfFalls;
-    std::cout << "poleSource fell " << poleSourceNumberOfFalls << " times averageing " << poleSourceAveFallTime << " this was " << carLoopCounter << " steps total\n";
+    std::cout << "poleSource fell " << poleSourceNumberOfFalls << " times averageing " << poleSourceAveFallTime << " this was " << poleSourceLoopCounter << " steps total\n";
     std::stringstream ss;
     ss << "poleSource - End of explore + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
     poleAgentSource->writePolicies(ss.str(), expName[expNumber]);
@@ -801,17 +843,8 @@ void twoCartRun(int number)
     ss3 << " - a = " << currentAlpha << " g = " << currentGamma << " run = " << currentRun;
     poleAgent->printReward(ss3.str(), expName[expNumber]);
     //std::cout << "about to exploit" << std::endl;
-    if (false == interTest)
-    {
-        int exploitePole = exploiteCartPole();
-        //std::cout << "end cartpole explot\n";
-        int expPoleSource = exploitePoleSource();
-        //std::cout << "end mt car explot\n";
-        poleResults[currentAlpha][currentGamma] += exploitePole;
-        poleSteps.push_back(exploitePole); //save the record
-        poleSourceSteps.push_back(expPoleSource);
-        poleFalls[currentAlpha][currentGamma] = poleNumberOfFalls;
-    }
+    poleSteps.push_back(-1); //indicate a break
+    poleSourceSteps.push_back(-1);
 
 
     //return exploiteMtCar();
@@ -823,6 +856,7 @@ use what has been learned on the car
 returns what is the min seen if multiple calls*/
 double exploiteMtCar()
 {
+    MtCar* testCar = new MtCar();
     double totalExpolit = 0;
     for (int a = 0; a < Constants::NUMBER_OF_MT_CAR_EXPOLITE_RUNS; a++)
     {
@@ -836,7 +870,7 @@ double exploiteMtCar()
         int stepCount = 0;
 
         {//if not finished running
-            car->reset(false); //reset the simulator to normal
+            testCar->reset(false); //reset the simulator to normal
             //carAgent->writePolicies("MtCar - start exploit");
             for (; carLoopCounter < Constants::CAR_MAX; carLoopCounter++)
             {//run for a time
@@ -846,27 +880,27 @@ double exploiteMtCar()
                 //cout << "Agent nominated " << carAction << "\n";
                 //car->printState();
                 //see what happened with that action
-                car->executeAction(carAction);
+                testCar->executeAction(carAction);
                 //learn from that
                 carAgent->updateLocal(car->getState());
                 carAgent->finishRun();
-                if (car->getState() == "0")
+                if (testCar->getState() == "0")
                 {//see if done
                     //cout << "It took " << stepCount << " steps\n";
-                    //car->printState();
+                    //testCar->printState();
                     carLoopCounter = Constants::CAR_EXPLOITATION_TIME;
                     stepCount++;
 
                 }
                 else
                 {
-                    // car->printState();
+                    // testCar->printState();
                     stepCount++;
                 }
 
             }
             //learn once more incase it finished
-            carAgent->updateLocal(car->getState());
+            carAgent->updateLocal(testCar->getState());
         }
         //if (stepCount < carCurrentMin)//only use if car about max
         {
@@ -886,6 +920,7 @@ double exploiteMtCar()
     //carAgent->writePolicies(ss.str(), expName[expNumber]);
     totalExpolit = totalExpolit / Constants::NUMBER_OF_MT_CAR_EXPOLITE_RUNS;
     carAgent->finishRun();
+    delete testCar;
     return totalExpolit;
 }
 
@@ -893,13 +928,13 @@ double exploiteMtCar()
 run the cart poll until it has fallen 2000 times*/
 int poleRun(int number)
 {
-    std::cout << ((number + 1) * Constants::POLL_TRAINING) << " =the number of training steps\n";
+    std::cout << ((number + 1) * Constants::CART_POLE_TRAINING_FALLS) << " =the number of training steps\n";
     poleAgent->changeActionSelectionTemperature(499);
     poleAgent->manageLearning(true, true);
     poleAgent->setUsingTransferLearning(false);
     poleAgent->chooseActionSelectionMethod(false, false, !false);
     //while (poleLoopCounter < number)//Constants::CAR_TRAINING_STEPS)
-    while (poleNumberOfFalls < ((number + 1) * Constants::POLL_TRAINING))
+    while (poleNumberOfFalls < ((number + 1) * Constants::CART_POLE_TRAINING_FALLS))
     {//if not finished running
         //std::cout << "ping\n";
         pole->reset();
@@ -956,13 +991,14 @@ int poleRun(int number)
 /*use what has been learned on the cart poll*/
 double exploiteCartPole()
 {
+    CartPole* testPole = new CartPole();
     double totalStepCount = 0;
     try
     {
 
         for (int a = 0; a < Constants::NUMBER_OF_CART_POLE_EXPLOITE_RUNS; a++)
         {
-            std::cout << "new exploit run" << std::endl;
+            //std::cout << "new exploit run" << std::endl;
             poleAgent->changeActionSelectionTemperature(1);
             poleAgent->setUsingTransferLearning(false);
             poleAgent->manageLearning(!true, !true);
@@ -972,14 +1008,14 @@ double exploiteCartPole()
             poleLoopCounter = 0;
             int stepCount = 0;
             {//if not finished running
-                pole->reset();
+                testPole->reset();
                 //   std::cout << "1" << std::endl;
                 for (;; poleLoopCounter++)
                 {//run for a time
 
                     if (poleLoopCounter % Constants::CAR_MAX == 0 && poleLoopCounter != 0)
                     {//if still ballencing heratbeat
-                        cout << "It took " << stepCount << " steps and didnt fall\n";
+                        cout << "CartPole took " << stepCount << " steps and didnt fall\n";
                         // pole->printState();
                         break;
                     }
@@ -989,17 +1025,17 @@ double exploiteCartPole()
                     //pole->printState();
                     // std::cout << "2" << std::endl;
                     //see what happened with that action
-                    pole->executeAction(poleCurrentAction);
+                    testPole->executeAction(poleCurrentAction);
                     //std::cout << poleCurrentAction;
                     //std::cout << "3" << std::endl;
                     //learn from that
-                    poleAgent->updateLocal(pole->getCurrentState());
+                    poleAgent->updateLocal(testPole->getCurrentState());
                     poleAgent->finishRun();
                     //cout << "Agent nominated " << poleCurrentAction << " in " << pole->getCurrentState() << "\n";
                     //std::cout << "4" << std::endl;
-                    if (pole->getCurrentState() == "-1")
+                    if (testPole->getCurrentState() == "-1")
                     {//see if fell over
-                        cout << "It took " << stepCount << " steps\n";
+                        cout << "CartPole took " << stepCount << " steps\n";
                         // pole->printState();
                         break;
 
@@ -1013,14 +1049,14 @@ double exploiteCartPole()
                 //learn once more incase it fell
                 std::stringstream ss;
                 //std::cout << "5" << std::endl;
-                ss << pole->getBox();
+                ss << testPole->getBox();
                 // std::cout << "6" << std::endl;
-                std::string poleState = pole->getCurrentState();
+                std::string poleState = testPole->getCurrentState();
                 //std::cout << "7" << std::endl;
                 if (poleState.size() <= 0)
                 {
                     std::cout << "pole error 2 " << carLoopCounter << " actioon= " << poleCurrentAction << "\n";
-                    pole->printState();
+                    testPole->printState();
                 }
                 poleAgent->updateLocal(poleState);
                 //std::cout << "8" << std::endl;
@@ -1040,7 +1076,7 @@ double exploiteCartPole()
         ss << "CartPole - End of exploit + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
         //std::cout << "11" << std::endl;
         totalStepCount = totalStepCount / Constants::NUMBER_OF_CART_POLE_EXPLOITE_RUNS;
-        pole->reset();
+        testPole->reset();
         //poleSteps.push_back(totalStepCount); //save the record
         //std::cout << "12" << std::endl;
     }
@@ -1051,12 +1087,14 @@ double exploiteCartPole()
         /// totalStepCount = exploiteCartPole();
     }
     poleAgent->finishRun();
+    delete testPole;
     return totalStepCount;
 }
 
 /*use what has been learned on the cart poll*/
 double exploitePoleSource()
 {
+    CartPole* testPole = new CartPole();
     double totalStepCount = 0;
     try
     {
@@ -1073,14 +1111,14 @@ double exploitePoleSource()
             poleSourceLoopCounter = 0;
             int stepCount = 0;
             {//if not finished running
-                poleSource->reset();
+                testPole->reset();
                 //   std::cout << "1" << std::endl;
                 for (;; poleSourceLoopCounter++)
                 {//run for a time
 
                     if (poleSourceLoopCounter % Constants::CAR_MAX == 0 && poleSourceLoopCounter != 0)
                     {//if still ballencing heratbeat
-                        cout << "Source It took " << stepCount << " steps and didnt fall\n";
+                        cout << "CartPole Source took " << stepCount << " steps and didnt fall\n";
                         // pole->printState();
                         break;
                     }
@@ -1090,17 +1128,17 @@ double exploitePoleSource()
                     //pole->printState();
                     // std::cout << "2" << std::endl;
                     //see what happened with that action
-                    poleSource->executeAction(poleSourceCurrentAction);
+                    testPole->executeAction(poleSourceCurrentAction);
                     //std::cout << poleCurrentAction;
                     //std::cout << "3" << std::endl;
                     //learn from that
-                    poleAgentSource->updateLocal(poleSource->getCurrentState());
+                    poleAgentSource->updateLocal(testPole->getCurrentState());
                     poleAgentSource->finishRun();
                     //cout << "Agent nominated " << poleCurrentAction << " in " << pole->getCurrentState() << "\n";
                     //std::cout << "4" << std::endl;
-                    if (poleSource->getCurrentState() == "-1")
+                    if (testPole->getCurrentState() == "-1")
                     {//see if fell over
-                        cout << "Source It took " << stepCount << " steps\n";
+                        cout << "CartPole Source took " << stepCount << " steps\n";
                         // pole->printState();
                         break;
 
@@ -1114,14 +1152,14 @@ double exploitePoleSource()
                 //learn once more incase it fell
                 std::stringstream ss;
                 //std::cout << "5" << std::endl;
-                ss << poleSource->getBox();
+                ss << testPole->getBox();
                 // std::cout << "6" << std::endl;
-                std::string poleState = poleSource->getCurrentState();
+                std::string poleState = testPole->getCurrentState();
                 //std::cout << "7" << std::endl;
                 if (poleState.size() <= 0)
                 {
                     std::cout << "pole error 2 " << carLoopCounter << " actioon= " << poleCurrentAction << "\n";
-                    pole->printState();
+                    testPole->printState();
                 }
                 poleAgentSource->updateLocal(poleState);
                 //std::cout << "8" << std::endl;
@@ -1141,7 +1179,7 @@ double exploitePoleSource()
         ss << "CartPole Source - End of exploit + a= " << currentAlpha << " g= " << currentGamma << " run= " << currentRun;
         //std::cout << "11" << std::endl;
         totalStepCount = totalStepCount / Constants::NUMBER_OF_CART_POLE_EXPLOITE_RUNS;
-        poleSource->reset();
+        testPole->reset();
         //poleSteps.push_back(totalStepCount); //save the record
         //std::cout << "12" << std::endl;
     }
@@ -1152,6 +1190,7 @@ double exploitePoleSource()
         /// totalStepCount = exploiteCartPole();
     }
     poleAgentSource->finishRun();
+    delete testPole;
     return totalStepCount;
 }
 

@@ -51,7 +51,7 @@ public:
     void setReward(Reward* reward);
     double getMostRecentReward() const;
     void printStateSpace(std::string name, std::string tag);
-    void readStateSpace(std::string name);
+    void readStateSpace(std::string name, std::string tag);
     std::vector<std::pair<std::string, double> > getAvailableActions(std::string s);
     void setCurrentAction(std::string current_Action);
     std::string getCurrentAction() const;
@@ -82,9 +82,9 @@ public:
     int getVisitCount(std::string stateName, std::string actionName);
     std::vector<std::pair<std::string, bool> >getTransferFeedback();
     void provideTransferFeedback(std::string stateName, bool feedback);
-void clearTLFeadback();
+    void clearTLFeadback();
 private:
-    
+
     bool useBoltzmann;
     bool useEGready;
     bool useTaylor;

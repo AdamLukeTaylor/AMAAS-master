@@ -35,7 +35,7 @@ public:
     void setQValue(std::string stateName, std::string actionName, double value);
     std::vector<std::pair<std::string, double> > getActionsFromState(std::string stateName);
     void writeStateActionToFile(std::string filenameIn, std::string tag);
-    void readStateActionFromFile(std::string filenameIn);
+    void readStateActionFromFile(std::string filenameIn, std::string tag);
     void qLearningUpdate(std::string previousStateName, std::string actionName, std::string currentStateName, double reward);
     std::pair<std::string, double> getBestAction(std::string stateName);
     void setGamma(double gamma);
@@ -55,6 +55,8 @@ public:
     std::vector<std::string> getStateOfMostVisit();
     int getVisitCount(std::string stateName, std::string actionName);
     std::vector<std::string> getStateOfRandom();
+    std::string getRandomAction();
+    int numberOfStates();
     //end
 private:
     double alpha;

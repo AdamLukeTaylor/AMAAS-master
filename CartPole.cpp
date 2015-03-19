@@ -63,6 +63,7 @@ void CartPole::randReset()
 
 void CartPole::reset()
 {
+    //::cout << "reseting pole\n";
     x = x_dot = theta = theta_dot = 0.0; //start at 0
     currentState = getBox();
 }
@@ -195,7 +196,7 @@ std::string CartPole::getState()
             theta < -Constants::twelve_degrees() ||
             theta > Constants::twelve_degrees())
     {
-        // cout << "+++++++++++++++++\nThe pole fell over\n+++++++++++++++++\n";
+        //cout << "+++++++++++++++++\nThe pole fell over\n+++++++++++++++++\n";
         return ("-1"); /* to signal failure */
     }
     else
