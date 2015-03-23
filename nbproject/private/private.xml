@@ -22,15 +22,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/DWLAgent.cpp</file>
-            <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPoleAgent.cpp</file>
             <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/Constants.h</file>
             <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/TransferMapping.cpp</file>
-            <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/QTable.h</file>
-            <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/include/TransferMapping.h</file>
             <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/CartPole.cpp</file>
-            <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/WLearningProcess.cpp</file>
             <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/RewardCartPole.cpp</file>
-            <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/DWL/src/QTable.cpp</file>
             <file>file:/C:/Users/Adam/Documents/NetBeansProjects/AMAAS-master/main.cpp</file>
         </group>
     </open-files>

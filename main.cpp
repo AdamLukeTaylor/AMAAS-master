@@ -83,7 +83,7 @@ int currentGamma = 0;
 //thes3 keep track of what we are doing
 std::string expName[] = {
     "eval",
-    "test2"//f 10, .001
+    "test34"//f 10, .001
 }; //e =reabward 1 fg2= reward 2 g= 1 tst not 3
 int expNumber = 1;
 
@@ -263,11 +263,11 @@ int main(int argc, char** argv)
     //for (currentGamma = 0; currentGamma < Constants::NUMBER_OF_GAMMAS; currentGamma++)
     //currentGamma = 8;
     {//set results
-        int numberOfTimes = 5; //Constants::NUMBER_OF_EXPS * numberOfTimes
+        int numberOfTimes = 15; //Constants::NUMBER_OF_EXPS * numberOfTimes
         for (currentRun = 0; currentRun < Constants::NUMBER_OF_EXPS * numberOfTimes; currentRun++)
         {
-            setPoleSourceAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
-            setPoleAgentForRun(alphas[9], gammas[1]); //alphas[currentAlpha], gammas[currentGamma]);
+            setPoleSourceAgentForRun(alphas[9], gammas[9]); //alphas[currentAlpha], gammas[currentGamma]);
+            setPoleAgentForRun(alphas[9], gammas[9]); //alphas[currentAlpha], gammas[currentGamma]);
 
             if (false && loadMapping && currentRun > 0)//never load mapping as agent still lives
             {//if we've run befor load mapping
@@ -704,10 +704,10 @@ void twoCartRun(int number)
     bool poleLearn = false;
     bool interTest = true;
     int interTestCount = 0;
-    int interTestNumber = 500;
+    int interTestNumber = 100;
     bool limitTraining = true;
     bool mappingFeedback = !true;
-    bool mappingAnts = true;
+    bool mappingAnts = !true;
     poleAgent->setUsingTransferLearning(true);
     poleAgentSource->setUsingTransferLearning(true);
     poleAgentSource->manageLearning(true, true);

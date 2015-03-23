@@ -2024,9 +2024,9 @@ void DWLAgent::changeEGreadyE(double input)
  */
 void DWLAgent::chooseActionSelectionMethod(bool boltzmann, bool eGready, bool taylor)
 {
-    if ((boltzmann + eGready + taylor) > 1)
+    if ((boltzmann + eGready + taylor) != 1)
     {//do nothing if none or both action selections
-        std::cout << "can t use more than 1 action selection\n";
+        std::cout << "can't use more or less than 1 action selection\n";
     }
     else
     {

@@ -15,7 +15,7 @@ public:
     const static int NUMBER_OF_GAMMAS = 10; //11
     const static int NUMBER_OF_EXPS = 1; //10
     const static int NUMBER_OF_MT_CAR_EXPOLITE_RUNS = 1;
-    const static int NUMBER_OF_CART_POLE_EXPLOITE_RUNS = 1;
+    const static int NUMBER_OF_CART_POLE_EXPLOITE_RUNS = 3;
 
     //mountain car
     //learn too fast ? ? ? ? ?
@@ -46,7 +46,7 @@ public:
     }
 
     //CART POLE
-    const static int CART_POLE_TRAINING_FALLS = 100;
+    const static int CART_POLE_TRAINING_FALLS = 1000;
 
     /*** Parameters for RL ***/
     const static int N_BOXES = 162; /* Number of disjoint boxes of state space. */
@@ -93,11 +93,11 @@ public:
     }
 
     const static float FORCE_MAG() {
-        return 10.0;
+        return .4;
     }
 
     const static float TAU() {
-        return 0.01;
+        return 0.1;
         //return 0.001;
     } /* seconds between state updates */
 
